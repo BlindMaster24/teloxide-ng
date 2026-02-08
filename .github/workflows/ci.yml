@@ -138,7 +138,7 @@ jobs:
       - name: Downgrade deps for MSRV
         if: ${{ matrix.rust == 'msrv' }}
         run: |
-            exit 0
+          cargo update -p time@0.3.47 --precise 0.3.36
         
 
       # NB. Don't test (build) examples so we can use non-msrv features in them (--tests/--doc)
