@@ -111,6 +111,7 @@ pub enum MessageKind {
     PaidMessagePriceChanged(MessagePaidMessagePriceChanged),
     GiftInfo(MessageGiftInfo),
     UniqueGiftInfo(MessageUniqueGiftInfo),
+    GiftUpgradeSent(MessageGiftUpgradeSent),
     VideoChatScheduled(MessageVideoChatScheduled),
     VideoChatStarted(MessageVideoChatStarted),
     VideoChatEnded(MessageVideoChatEnded),
@@ -816,6 +817,14 @@ pub struct MessageUniqueGiftInfo {
 
 #[serde_with::skip_serializing_none]
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct MessageGiftUpgradeSent {
+    /// Service message: upgrade of a gift was purchased after the gift was
+    /// sent
+    pub gift_upgrade_sent: GiftInfo,
+}
+
+#[serde_with::skip_serializing_none]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct MessageVideoChatScheduled {
     /// Service message: video chat scheduled
     pub video_chat_scheduled: VideoChatScheduled,
@@ -865,7 +874,7 @@ mod getters {
         MessageNewChatPhoto, MessageNewChatTitle, MessageOrigin, MessagePassportData,
         MessagePinned, MessageProximityAlertTriggered, MessageSuccessfulPayment,
         MessageSupergroupChatCreated, MessageUsersShared, MessageVideoChatParticipantsInvited,
-        PhotoSize, Story, TextQuote, User,
+        MessageGiftUpgradeSent, PhotoSize, Story, TextQuote, User,
     };
 
     use super::{
@@ -1790,6 +1799,15 @@ mod getters {
         pub fn unique_gift_info(&self) -> Option<&types::UniqueGiftInfo> {
             match &self.kind {
                 UniqueGiftInfo(MessageUniqueGiftInfo { unique_gift }) => Some(unique_gift),
+                _ => None,
+            }
+        }
+
+        pub fn gift_upgrade_sent(&self) -> Option<&types::GiftInfo> {
+            match &self.kind {
+                GiftUpgradeSent(MessageGiftUpgradeSent { gift_upgrade_sent }) => {
+                    Some(gift_upgrade_sent)
+                }
                 _ => None,
             }
         }
@@ -2928,7 +2946,8 @@ mod tests {
                     username: Some("shdwchn10".to_owned()),
                     language_code: None,
                     is_premium: false,
-                    added_to_attachment_menu: false
+                    added_to_attachment_menu: false,
+                    has_topics_enabled: false
                 }],
                 additional_chat_count: None,
                 premium_subscription_month_count: Some(6),
@@ -3027,6 +3046,7 @@ mod tests {
             "date": 1721162577,
             "unique_gift": {
                 "gift": {
+                    "gift_id": "gift_id",
                     "base_name": "name",
                     "name": "name",
                     "number": 123,

@@ -35,6 +35,10 @@ pub struct User {
     /// `true`, if this user added the bot to the attachment menu.
     #[serde(default, skip_serializing_if = "std::ops::Not::not")]
     pub added_to_attachment_menu: bool,
+
+    /// `true`, if the bot has forum topic mode enabled in private chats.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub has_topics_enabled: bool,
 }
 
 impl User {
@@ -151,6 +155,7 @@ mod tests {
             language_code: Some(String::from("ru")),
             is_premium: false,
             added_to_attachment_menu: false,
+            has_topics_enabled: false,
         };
         let actual = serde_json::from_str::<User>(json).unwrap();
         assert_eq!(actual, expected)
@@ -167,6 +172,7 @@ mod tests {
             language_code: None,
             is_premium: false,
             added_to_attachment_menu: false,
+            has_topics_enabled: false,
         };
 
         let user_b = User {
@@ -178,6 +184,7 @@ mod tests {
             language_code: None,
             is_premium: false,
             added_to_attachment_menu: false,
+            has_topics_enabled: false,
         };
 
         assert_eq!(user_a.full_name(), "First Last");

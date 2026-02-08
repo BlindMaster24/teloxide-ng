@@ -8,8 +8,8 @@ use crate::{
         EditMessageCaptionInline, EditMessageChecklist, EditMessageMedia, EditMessageMediaInline,
         EditMessageText, EditMessageTextInline, EditStory, GiftPremiumSubscription, PostStory,
         SavePreparedInlineMessage, SendAnimation, SendAudio, SendChecklist, SendDocument, SendGift,
-        SendGiftChat, SendMediaGroup, SendMessage, SendPaidMedia, SendPhoto, SendPoll, SendVideo,
-        SendVoice,
+        SendGiftChat, SendMediaGroup, SendMessage, SendMessageDraft, SendPaidMedia, SendPhoto,
+        SendPoll, SendVideo, SendVoice,
     },
     prelude::Requester,
     requests::{HasPayload, Output, Request},
@@ -136,6 +136,7 @@ impl<B> Requester for DefaultParseMode<B>
 where
     B: Requester,
     B::SendMessage: Clone,
+    B::SendMessageDraft: Clone,
     B::SendPhoto: Clone,
     B::SendVideo: Clone,
     B::SendAudio: Clone,
@@ -167,6 +168,7 @@ where
 
     requester_forward! {
         send_message,
+        send_message_draft,
         send_photo,
         send_video,
         send_audio,
@@ -283,6 +285,8 @@ where
         edit_message_reply_markup,
         edit_message_reply_markup_inline,
         stop_poll,
+        approve_suggested_post,
+        decline_suggested_post,
         delete_message,
         delete_messages,
         send_sticker,
@@ -317,10 +321,13 @@ where
         get_business_account_star_balance,
         transfer_business_account_stars,
         get_business_account_gifts,
+        get_user_gifts,
+        get_chat_gifts,
         convert_gift_to_stars,
         upgrade_gift,
         transfer_gift,
         delete_story,
+        repost_story,
         send_invoice,
         create_invoice_link,
         answer_shipping_query,
@@ -375,6 +382,7 @@ macro_rules! impl_visit_parse_modes {
 
 impl_visit_parse_modes! {
     SendMessage => [parse_mode],
+    SendMessageDraft => [parse_mode],
     SendPhoto => [parse_mode],
     SendVideo => [parse_mode],
     SendAudio => [parse_mode],
