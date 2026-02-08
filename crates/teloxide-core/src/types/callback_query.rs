@@ -121,6 +121,7 @@ mod tests {
                 language_code: None,
                 is_premium: false,
                 added_to_attachment_menu: false,
+                has_topics_enabled: false,
             },
             chat_instance: "123456".to_string(),
             message: None,

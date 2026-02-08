@@ -2,36 +2,32 @@
 
 use serde::Serialize;
 
-use crate::types::{BusinessConnectionId, OwnedGifts};
+use crate::types::{OwnedGifts, UserId};
 
 impl_payload! {
-    /// Returns the gifts received and owned by a managed business account. Requires the _can_view_gifts_and_stars_ business bot right. Returns [`OwnedGifts`] on success.
+    /// Returns the gifts owned and hosted by a user. Returns [`OwnedGifts`] on success.
     ///
     /// [`OwnedGifts`]: crate::types::OwnedGifts
     #[derive(Debug, PartialEq, Eq, Hash, Clone, Serialize)]
-    pub GetBusinessAccountGifts (GetBusinessAccountGiftsSetters) => OwnedGifts {
+    pub GetUserGifts (GetUserGiftsSetters) => OwnedGifts {
         required {
-            /// Unique identifier of the business connection
-            pub business_connection_id: BusinessConnectionId,
+            /// Unique identifier of the user
+            pub user_id: UserId,
         }
         optional {
-            /// Pass _true_ to exclude gifts that aren't saved to the account's profile page
-            pub exclude_unsaved: bool,
-            /// Pass _true_ to exclude gifts that are saved to the account's profile page
-            pub exclude_saved: bool,
             /// Pass _true_ to exclude gifts that can be purchased an unlimited number of times
             pub exclude_unlimited: bool,
             /// Pass _true_ to exclude gifts that can be purchased a limited number of times and can be upgraded to unique
             pub exclude_limited_upgradable: bool,
             /// Pass _true_ to exclude gifts that can be purchased a limited number of times and can't be upgraded to unique
             pub exclude_limited_non_upgradable: bool,
-            /// Pass _true_ to exclude unique gifts
-            pub exclude_unique: bool,
             /// Pass _true_ to exclude gifts that were assigned from the TON blockchain and can't be resold or transferred in Telegram
             pub exclude_from_blockchain: bool,
+            /// Pass _true_ to exclude unique gifts
+            pub exclude_unique: bool,
             /// Pass _true_ to sort results by gift price instead of send date. Sorting is applied before pagination
             pub sort_by_price: bool,
-            /// Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of results
+            /// Offset of the first entry to return as received from the previous request; use an empty string to get the first chunk of results
             pub offset: String [into],
             /// The maximum number of gifts to be returned; 1-100. Defaults to 100
             pub limit: u8,
