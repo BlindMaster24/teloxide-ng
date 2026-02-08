@@ -1,7 +1,7 @@
 use crate::{
     dispatching::{
-        dialogue::{GetChatId, Storage},
         DpHandlerDescription,
+        dialogue::{GetChatId, Storage},
     },
     types::{Me, Message},
     utils::command::BotCommands,
@@ -190,6 +190,7 @@ mod tests {
                     language_code: Some(String::from("en")),
                     is_premium: false,
                     added_to_attachment_menu: false,
+                    has_topics_enabled: false,
                 }),
                 sender_chat: None,
                 is_topic_message: false,
@@ -246,6 +247,7 @@ mod tests {
                 language_code: None,
                 is_premium: false,
                 added_to_attachment_menu: false,
+                has_topics_enabled: false,
             },
             can_join_groups: false,
             can_read_all_group_messages: false,

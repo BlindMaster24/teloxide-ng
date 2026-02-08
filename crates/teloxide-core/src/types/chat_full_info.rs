@@ -4,7 +4,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::types::{
     AcceptedGiftTypes, Birthdate, BusinessIntro, BusinessLocation, BusinessOpeningHours, Chat,
-    ChatId, ChatLocation, ChatPermissions, ChatPhoto, Message, ReactionType, Seconds, User,
+    ChatId, ChatLocation, ChatPermissions, ChatPhoto, Message, ReactionType, Seconds,
+    UniqueGiftColors, User, UserRating,
 };
 
 /// Custom emoji identifier.
@@ -58,6 +59,9 @@ pub struct ChatFullInfo {
     /// corresponding user for private chats
     pub accepted_gift_types: AcceptedGiftTypes,
 
+    /// For private chats, the rating of the user if any.
+    pub rating: Option<UserRating>,
+
     /// Identifier of the accent color for the chat name and backgrounds of the
     /// chat photo, reply header, and link preview. See [accent colors] for more
     /// details.
@@ -68,6 +72,10 @@ pub struct ChatFullInfo {
     /// Custom emoji identifier of the emoji chosen by the chat for the reply
     /// header and link preview background
     pub background_custom_emoji_id: Option<CustomEmojiId>,
+
+    /// The color scheme based on a unique gift for the chat's name, message
+    /// replies and link previews.
+    pub unique_gift_colors: Option<UniqueGiftColors>,
 
     /// Identifier of the accent color for the chat's profile background. See
     /// [profile accent colors] for more details.
@@ -96,6 +104,10 @@ pub struct ChatFullInfo {
     /// The maximum number of reactions that can be set on a message in the
     /// chat
     pub max_reaction_count: u8,
+
+    /// The number of Telegram Stars a general user have to pay to send a
+    /// message to the chat.
+    pub paid_message_star_count: Option<u32>,
 }
 
 #[serde_with::skip_serializing_none]
@@ -179,6 +191,9 @@ pub struct ChatFullInfoPrivate {
     /// For private chats with business accounts, the opening hours of the
     /// business.
     pub business_opening_hours: Option<BusinessOpeningHours>,
+
+    /// For private chats, the rating of the user if any.
+    pub rating: Option<UserRating>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -622,6 +637,7 @@ mod serde_helper {
         business_intro: Option<BusinessIntro>,
         business_location: Option<BusinessLocation>,
         business_opening_hours: Option<BusinessOpeningHours>,
+        rating: Option<super::UserRating>,
     }
 
     impl From<ChatPrivateFullInfo> for super::ChatFullInfoPrivate {
@@ -639,6 +655,7 @@ mod serde_helper {
                 business_intro,
                 business_location,
                 business_opening_hours,
+                rating,
             }: ChatPrivateFullInfo,
         ) -> Self {
             Self {
@@ -653,6 +670,7 @@ mod serde_helper {
                 business_intro,
                 business_location,
                 business_opening_hours,
+                rating,
             }
         }
     }
@@ -671,6 +689,7 @@ mod serde_helper {
                 business_intro,
                 business_location,
                 business_opening_hours,
+                rating,
             }: super::ChatFullInfoPrivate,
         ) -> Self {
             Self {
@@ -686,6 +705,7 @@ mod serde_helper {
                 business_intro,
                 business_location,
                 business_opening_hours,
+                rating,
             }
         }
     }
@@ -723,15 +743,19 @@ mod tests {
                 limited_gifts: true,
                 unique_gifts: true,
                 premium_subscription: true,
+                gifts_from_channels: true,
             },
+            rating: None,
             accent_color_id: None,
             background_custom_emoji_id: None,
+            unique_gift_colors: None,
             profile_accent_color_id: None,
             profile_background_custom_emoji_id: None,
             emoji_status_custom_emoji_id: None,
             emoji_status_expiration_date: DateTime::from_timestamp(1720708004, 0),
             has_visible_history: false,
             max_reaction_count: 0,
+            paid_message_star_count: None,
         };
         let actual = from_str(
             r#"{
@@ -746,13 +770,14 @@ mod tests {
                 ],
                 "emoji_status_expiration_date": 1720708004,
                 "max_reaction_count": 0,
-                "accepted_gift_types": {
-                    "unlimited_gifts": true,
-                    "limited_gifts": true,
-                    "unique_gifts": true,
-                    "premium_subscription": true
-                }
-            }"#,
+                    "accepted_gift_types": {
+                        "unlimited_gifts": true,
+                        "limited_gifts": true,
+                        "unique_gifts": true,
+                        "premium_subscription": true,
+                        "gifts_from_channels": true
+                    }
+                }"#,
         )
         .unwrap();
         assert_eq!(expected, actual);
@@ -774,6 +799,7 @@ mod tests {
                 business_intro: None,
                 business_location: None,
                 business_opening_hours: None,
+                rating: None,
             })),
             photo: None,
             pinned_message: None,
@@ -785,15 +811,19 @@ mod tests {
                 limited_gifts: true,
                 unique_gifts: true,
                 premium_subscription: true,
+                gifts_from_channels: true,
             },
+            rating: None,
             accent_color_id: None,
             background_custom_emoji_id: None,
+            unique_gift_colors: None,
             profile_accent_color_id: None,
             profile_background_custom_emoji_id: None,
             emoji_status_custom_emoji_id: None,
             emoji_status_expiration_date: DateTime::from_timestamp(1720708004, 0),
             has_visible_history: false,
             max_reaction_count: 0,
+            paid_message_star_count: None,
         };
         eprintln!("{}", to_string(&chat).unwrap());
         assert_eq!(
@@ -810,7 +840,8 @@ mod tests {
                         "unlimited_gifts": true,
                         "limited_gifts": true,
                         "unique_gifts": true,
-                        "premium_subscription": true
+                        "premium_subscription": true,
+                        "gifts_from_channels": true
                     }
                 }"#
             )
@@ -834,6 +865,7 @@ mod tests {
                 business_intro: None,
                 business_location: None,
                 business_opening_hours: None,
+                rating: None,
             })),
             photo: None,
             pinned_message: None,
@@ -845,15 +877,19 @@ mod tests {
                 limited_gifts: true,
                 unique_gifts: true,
                 premium_subscription: true,
+                gifts_from_channels: true,
             },
+            rating: None,
             accent_color_id: None,
             background_custom_emoji_id: None,
+            unique_gift_colors: None,
             profile_accent_color_id: None,
             profile_background_custom_emoji_id: None,
             emoji_status_custom_emoji_id: None,
             emoji_status_expiration_date: None,
             has_visible_history: false,
             max_reaction_count: 0,
+            paid_message_star_count: None,
         };
 
         let json = to_string(&chat).unwrap();

@@ -242,6 +242,7 @@ mod tests {
                 language_code: Some(String::from("en")),
                 is_premium: false,
                 added_to_attachment_menu: false,
+                has_topics_enabled: false,
             },
             kind: TransactionPartnerUserKind::PremiumPurchase(
                 TransactionPartnerUserPremiumPurchase { premium_subscription_duration: Some(1) },

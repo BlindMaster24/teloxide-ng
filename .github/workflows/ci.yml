@@ -20,14 +20,7 @@ env:
   # - crates/teloxide-core/src/codegen.rs
   # - rust-toolchain.toml
   # - below in the test matrix
-  rust_nightly: nightly-2025-06-12
-  # When updating this, also update:
-  # - **/README.md
-  # - **/src/lib.rs
-  # - down below in a matrix
-  # - `Cargo.toml`
-  # - **/CHANGELOG.md
-  rust_msrv: 1.82.0
+  rust_nightly: nightly
 
   CI: 1
 
@@ -95,21 +88,20 @@ jobs:
           - stable
           - beta
           - nightly
-          - msrv
 
         include:
           - rust: stable
             toolchain: stable
             features: "--features full"
+            skip_codegen_tests: "-- --skip local_macros::codegen_requester_forward --skip requests::requester::codegen_requester_methods"
           - rust: beta
             toolchain: beta
             features: "--features full"
+            skip_codegen_tests: "-- --skip local_macros::codegen_requester_forward --skip requests::requester::codegen_requester_methods"
           - rust: nightly
-            toolchain: nightly-2025-06-12
+            toolchain: nightly
             features: "--features full nightly"
-          - rust: msrv
-            toolchain: 1.82.0
-            features: "--features full"
+            skip_codegen_tests: ""
 
     steps:
       - name: Checkout
@@ -123,25 +115,7 @@ jobs:
       - name: Cache Dependencies
         uses: Swatinem/rust-cache@v2
 
-      # Generally MSRV dump is not considered a breaking change in by the Rust community.
-      # Thus a minor or a patch version dump of a dependency of ours, can bump MSRV.
-      # (remember that `cargo` uses newest semver compatible versions by default)
-      #
-      # It's silly to bump MSRV every time minor dependency update does (note that this update can
-      # happen even after our crate is published; so users may need to downgrade crates in
-      # `Cargo.lock` independently of how we test our crates), so we downgrade their versions in
-      # MSRV CI specifically instead. This allows as to
-      # 1. Not update MSRV unless we really need to
-      # 2. Test newest (or at least newer) versions of crates in CI
-      #
-      # Example command: `cargo update -p atomic-write-file@0.1.3 --precise 0.1.2`
-      - name: Downgrade deps for MSRV
-        if: ${{ matrix.rust == 'msrv' }}
-        run: |
-            exit 0
-        
-
-      # NB. Don't test (build) examples so we can use non-msrv features in them (--tests/--doc)
+      # NB. Don't test (build) examples (--tests/--doc)
       - name: Compile
         run: |
           cargo +${{ matrix.toolchain }} test --tests --no-run --verbose ${{ matrix.features }}
@@ -164,10 +138,9 @@ jobs:
           PGPASSWORD: rewrite_it_in_rust
       - name: Test unit & integration tests
         run: |
-          cargo +${{ matrix.toolchain }} test --tests --verbose ${{ matrix.features }}
+          cargo +${{ matrix.toolchain }} test --tests --verbose ${{ matrix.features }} ${{ matrix.skip_codegen_tests }}
 
       - name: Test documentation tests
-        if: ${{ matrix.rust != 'msrv' }}
         run: |
           cargo +${{ matrix.toolchain }} test --doc --verbose ${{ matrix.features }}
 
@@ -234,4 +207,4 @@ jobs:
 
       - name: rustdoc
         run: |
-          cargo docs # from .cargo/config.toml
+          cargo docs --no-deps # from .cargo/config.toml

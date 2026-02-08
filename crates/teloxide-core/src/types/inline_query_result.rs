@@ -257,9 +257,8 @@ mod raw {
 #[cfg(test)]
 mod tests {
     use crate::types::{
-        inline_keyboard_markup::InlineKeyboardMarkup, parse_mode::ParseMode, InlineQueryResult,
-        InlineQueryResultArticle, InlineQueryResultAudio, InlineQueryResultCachedAudio,
-        InlineQueryResultCachedDocument, InlineQueryResultCachedGif,
+        InlineQueryResult, InlineQueryResultArticle, InlineQueryResultAudio,
+        InlineQueryResultCachedAudio, InlineQueryResultCachedDocument, InlineQueryResultCachedGif,
         InlineQueryResultCachedMpeg4Gif, InlineQueryResultCachedPhoto,
         InlineQueryResultCachedSticker, InlineQueryResultCachedVideo, InlineQueryResultCachedVoice,
         InlineQueryResultContact, InlineQueryResultDocument, InlineQueryResultGame,
@@ -267,6 +266,7 @@ mod tests {
         InlineQueryResultPhoto, InlineQueryResultVenue, InlineQueryResultVideo,
         InlineQueryResultVoice, InputMessageContent, InputMessageContentLocation,
         InputMessageContentText, LinkPreviewOptions, Seconds,
+        inline_keyboard_markup::InlineKeyboardMarkup, parse_mode::ParseMode,
     };
 
     use mime::Mime;

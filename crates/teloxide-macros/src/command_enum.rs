@@ -1,6 +1,6 @@
 use crate::{
-    command_attr::CommandAttrs, error::compile_error_at, fields_parse::ParserType,
-    rename_rules::RenameRule, Result,
+    Result, command_attr::CommandAttrs, error::compile_error_at, fields_parse::ParserType,
+    rename_rules::RenameRule,
 };
 
 /// Create a if block that checks if the given attribute is applied to a enum

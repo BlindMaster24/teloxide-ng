@@ -64,6 +64,7 @@ pub use game_high_score::*;
 pub use general_forum_topic_hidden::*;
 pub use general_forum_topic_unhidden::*;
 pub use gift::*;
+pub use gift_background::*;
 pub use gift_info::*;
 pub use giveaway::*;
 pub use giveaway_completed::*;
@@ -171,6 +172,7 @@ pub use text_quote::*;
 pub use thread_id::*;
 pub use transaction_partner::*;
 pub use unique_gift::*;
+pub use unique_gift_colors::*;
 pub use unique_gift_info::*;
 pub use unit_false::*;
 pub use unit_true::*;
@@ -178,6 +180,7 @@ pub use update::*;
 pub use user::*;
 pub use user_chat_boosts::*;
 pub use user_profile_photos::*;
+pub use user_rating::*;
 pub use users_shared::*;
 pub use venue::*;
 pub use video::*;
@@ -253,6 +256,7 @@ mod game_high_score;
 mod general_forum_topic_hidden;
 mod general_forum_topic_unhidden;
 mod gift;
+mod gift_background;
 mod gift_info;
 mod giveaway;
 mod giveaway_completed;
@@ -334,6 +338,7 @@ mod text_quote;
 mod thread_id;
 mod transaction_partner;
 mod unique_gift;
+mod unique_gift_colors;
 mod unique_gift_info;
 mod unit_false;
 mod unit_true;
@@ -341,6 +346,7 @@ mod update;
 mod user;
 mod user_chat_boosts;
 mod user_profile_photos;
+mod user_rating;
 mod users_shared;
 mod venue;
 mod video;
@@ -608,7 +614,7 @@ pub(crate) mod option_msg_id_as_int {
 pub(crate) mod vec_msg_id_as_vec_int {
     use crate::types::MessageId;
 
-    use serde::{ser::SerializeSeq, Serializer};
+    use serde::{Serializer, ser::SerializeSeq};
 
     pub(crate) fn serialize<S>(msg_ids: &Vec<MessageId>, serializer: S) -> Result<S::Ok, S::Error>
     where

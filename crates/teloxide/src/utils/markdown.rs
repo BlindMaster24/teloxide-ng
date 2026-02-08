@@ -66,11 +66,7 @@ pub fn underline(s: &str) -> String {
     // underline entity, so instead of ___italic underline___ we should use
     // ___italic underline_\r__, where \r is a character with code 13, which
     // will be ignored.
-    if s.starts_with('_') && s.ends_with('_') {
-        format!(r"__{s}\r__")
-    } else {
-        format!("__{s}__")
-    }
+    if s.starts_with('_') && s.ends_with('_') { format!(r"__{s}\r__") } else { format!("__{s}__") }
 }
 
 /// Applies the strikethrough font style to the string.
@@ -306,6 +302,7 @@ mod tests {
             language_code: None,
             is_premium: false,
             added_to_attachment_menu: false,
+            has_topics_enabled: false,
         };
         assert_eq!(user_mention_or_link(&user_with_username), "@abcd");
         let user_without_username = User {
@@ -317,6 +314,7 @@ mod tests {
             language_code: None,
             is_premium: false,
             added_to_attachment_menu: false,
+            has_topics_enabled: false,
         };
         assert_eq!(user_mention_or_link(&user_without_username), "[Name](tg://user/?id=123456789)")
     }

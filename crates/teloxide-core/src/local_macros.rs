@@ -382,9 +382,9 @@ macro_rules! download_forward {
             fn download_file<'dst>(
                 &self,
                 path: &str,
-                destination: &'dst mut (dyn tokio::io::AsyncWrite
-                               + core::marker::Unpin
-                               + core::marker::Send),
+                destination: &'dst mut (
+                              dyn tokio::io::AsyncWrite + core::marker::Unpin + core::marker::Send
+                          ),
             ) -> Self::Fut<'dst> {
                 let $this = self;
                 ($inner).download_file(path, destination)
@@ -477,6 +477,15 @@ macro_rules! requester_forward {
         T: Into<String> {
             let this = self;
             $body!(send_message this (chat_id: C, text: T))
+        }
+    };
+    (@method send_message_draft $body:ident $ty:ident) => {
+        type SendMessageDraft = $ty![SendMessageDraft];
+
+        fn send_message_draft<C, T>(&self, chat_id: C, draft_id: u32, text: T) -> Self::SendMessageDraft where C: Into<ChatId>,
+        T: Into<String> {
+            let this = self;
+            $body!(send_message_draft this (chat_id: C, draft_id: u32, text: T))
         }
     };
     (@method forward_message $body:ident $ty:ident) => {
@@ -1321,6 +1330,22 @@ macro_rules! requester_forward {
             $body!(stop_poll this (chat_id: C, message_id: MessageId))
         }
     };
+    (@method approve_suggested_post $body:ident $ty:ident) => {
+        type ApproveSuggestedPost = $ty![ApproveSuggestedPost];
+
+        fn approve_suggested_post<C>(&self, chat_id: C, message_id: MessageId) -> Self::ApproveSuggestedPost where C: Into<ChatId> {
+            let this = self;
+            $body!(approve_suggested_post this (chat_id: C, message_id: MessageId))
+        }
+    };
+    (@method decline_suggested_post $body:ident $ty:ident) => {
+        type DeclineSuggestedPost = $ty![DeclineSuggestedPost];
+
+        fn decline_suggested_post<C>(&self, chat_id: C, message_id: MessageId) -> Self::DeclineSuggestedPost where C: Into<ChatId> {
+            let this = self;
+            $body!(decline_suggested_post this (chat_id: C, message_id: MessageId))
+        }
+    };
     (@method delete_message $body:ident $ty:ident) => {
         type DeleteMessage = $ty![DeleteMessage];
 
@@ -1623,6 +1648,22 @@ macro_rules! requester_forward {
             $body!(get_business_account_gifts this (business_connection_id: BusinessConnectionId))
         }
     };
+    (@method get_user_gifts $body:ident $ty:ident) => {
+        type GetUserGifts = $ty![GetUserGifts];
+
+        fn get_user_gifts(&self, user_id: UserId) -> Self::GetUserGifts {
+            let this = self;
+            $body!(get_user_gifts this (user_id: UserId))
+        }
+    };
+    (@method get_chat_gifts $body:ident $ty:ident) => {
+        type GetChatGifts = $ty![GetChatGifts];
+
+        fn get_chat_gifts<C>(&self, chat_id: C) -> Self::GetChatGifts where C: Into<Recipient> {
+            let this = self;
+            $body!(get_chat_gifts this (chat_id: C))
+        }
+    };
     (@method convert_gift_to_stars $body:ident $ty:ident) => {
         type ConvertGiftToStars = $ty![ConvertGiftToStars];
 
@@ -1653,6 +1694,14 @@ macro_rules! requester_forward {
         fn post_story(&self, business_connection_id: BusinessConnectionId, content: InputStoryContent, active_period: Seconds) -> Self::PostStory {
             let this = self;
             $body!(post_story this (business_connection_id: BusinessConnectionId, content: InputStoryContent, active_period: Seconds))
+        }
+    };
+    (@method repost_story $body:ident $ty:ident) => {
+        type RepostStory = $ty![RepostStory];
+
+        fn repost_story<F>(&self, business_connection_id: BusinessConnectionId, from_chat_id: F, from_story_id: StoryId, active_period: Seconds) -> Self::RepostStory where F: Into<ChatId> {
+            let this = self;
+            $body!(repost_story this (business_connection_id: BusinessConnectionId, from_chat_id: F, from_story_id: StoryId, active_period: Seconds))
         }
     };
     (@method edit_story $body:ident $ty:ident) => {
@@ -1793,7 +1842,7 @@ macro_rules! requester_forward {
 fn codegen_requester_forward() {
     use crate::codegen::{
         add_hidden_preamble,
-        convert::{convert_for, Convert},
+        convert::{Convert, convert_for},
         ensure_file_contents, min_prefix, project_root, reformat, replace_block,
         schema::{self, Type},
         to_uppercase,

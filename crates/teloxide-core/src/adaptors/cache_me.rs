@@ -1,10 +1,9 @@
 use std::{future::IntoFuture, pin::Pin, sync::Arc};
 
 use futures::{
-    future,
-    future::{ok, Ready},
+    Future, future,
+    future::{Ready, ok},
     task::{Context, Poll},
-    Future,
 };
 use once_cell::sync::OnceCell;
 use url::Url;
@@ -98,6 +97,7 @@ where
         copy_message,
         copy_messages,
         send_message,
+        send_message_draft,
         send_photo,
         send_audio,
         send_document,
@@ -194,6 +194,8 @@ where
         edit_message_reply_markup,
         edit_message_reply_markup_inline,
         stop_poll,
+        approve_suggested_post,
+        decline_suggested_post,
         delete_message,
         delete_messages,
         send_sticker,
@@ -231,12 +233,15 @@ where
         get_business_account_star_balance,
         transfer_business_account_stars,
         get_business_account_gifts,
+        get_user_gifts,
+        get_chat_gifts,
         convert_gift_to_stars,
         upgrade_gift,
         transfer_gift,
         post_story,
         edit_story,
         delete_story,
+        repost_story,
         send_invoice,
         create_invoice_link,
         answer_shipping_query,

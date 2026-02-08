@@ -1,11 +1,11 @@
 use bytes::Bytes;
-use futures::{future::BoxFuture, stream::BoxStream, FutureExt, StreamExt};
+use futures::{FutureExt, StreamExt, future::BoxFuture, stream::BoxStream};
 use tokio::io::AsyncWrite;
 
 use crate::{
+    DownloadError,
     bot::Bot,
     net::{self, Download},
-    DownloadError,
 };
 
 impl Download for Bot {

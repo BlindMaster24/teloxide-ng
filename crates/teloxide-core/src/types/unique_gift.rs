@@ -1,4 +1,4 @@
-use crate::types::{Rgb, Sticker};
+use crate::types::{Chat, GiftId, Rgb, Sticker, UniqueGiftColors};
 use serde::{Deserialize, Serialize};
 
 /// This object describes a unique gift that was upgraded from a regular gift.
@@ -7,6 +7,9 @@ use serde::{Deserialize, Serialize};
 #[derive(PartialEq, Eq, Hash)]
 #[derive(Serialize, Deserialize)]
 pub struct UniqueGift {
+    /// Identifier of the regular gift from which the gift was upgraded
+    pub gift_id: GiftId,
+
     /// Human-readable name of the regular gift from which this unique gift was
     /// upgraded
     pub base_name: String,
@@ -26,6 +29,23 @@ pub struct UniqueGift {
 
     /// Backdrop of the gift
     pub backdrop: UniqueGiftBackdrop,
+
+    /// `true`, if the original regular gift was exclusively purchaseable by
+    /// Telegram Premium subscribers
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub is_premium: bool,
+
+    /// `true`, if the gift is assigned from the TON blockchain and can't be
+    /// resold or transferred in Telegram
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub is_from_blockchain: bool,
+
+    /// The color scheme that can be used by the gift's owner for chat name,
+    /// replies and link previews.
+    pub colors: Option<UniqueGiftColors>,
+
+    /// Information about the chat that published the gift
+    pub publisher_chat: Option<Chat>,
 }
 
 /// This object describes the model of a unique gift.
@@ -123,6 +143,7 @@ mod tests {
         };
 
         let unique_gift = UniqueGift {
+            gift_id: "gift_id".into(),
             base_name: "name".to_owned(),
             name: "name".to_owned(),
             number: 123,
@@ -146,9 +167,14 @@ mod tests {
                 },
                 rarity_per_mille: 123,
             },
+            is_premium: false,
+            is_from_blockchain: false,
+            colors: None,
+            publisher_chat: None,
         };
 
         let unique_gift_json = r#"{
+            "gift_id": "gift_id",
             "base_name": "name",
             "name": "name",
             "number": 123,

@@ -3,7 +3,7 @@ use std::sync::Arc;
 use url::Url;
 
 use crate::{
-    adaptors::{throttle::ThrottlingRequest, Throttle},
+    adaptors::{Throttle, throttle::ThrottlingRequest},
     errors::AsResponseParameters,
     requests::{HasPayload, Requester},
     types::*,
@@ -40,13 +40,13 @@ macro_rules! ftyid {
 impl<B: Requester> Requester for Throttle<B>
 where
     B::Err: AsResponseParameters,
-
     B::SendMessage: Clone + Send + Sync + 'static,
     B::ForwardMessage: Clone + Send + Sync + 'static,
     B::ForwardMessages: Clone + Send + Sync + 'static,
     B::CopyMessage: Clone + Send + Sync + 'static,
     B::CopyMessages: Clone + Send + Sync + 'static,
     B::SendPhoto: Clone + Send + Sync + 'static,
+    B::SendMessageDraft: Clone + Send + Sync + 'static,
     B::SendAudio: Clone + Send + Sync + 'static,
     B::SendDocument: Clone + Send + Sync + 'static,
     B::SendVideo: Clone + Send + Sync + 'static,
@@ -74,6 +74,7 @@ where
         copy_message,
         copy_messages,
         send_photo,
+        send_message_draft,
         send_audio,
         send_document,
         send_video,
@@ -183,6 +184,8 @@ where
         edit_message_reply_markup,
         edit_message_reply_markup_inline,
         stop_poll,
+        approve_suggested_post,
+        decline_suggested_post,
         delete_message,
         delete_messages,
         get_sticker_set,
@@ -219,12 +222,15 @@ where
         get_business_account_star_balance,
         transfer_business_account_stars,
         get_business_account_gifts,
+        get_user_gifts,
+        get_chat_gifts,
         convert_gift_to_stars,
         upgrade_gift,
         transfer_gift,
         post_story,
         edit_story,
         delete_story,
+        repost_story,
         answer_shipping_query,
         create_invoice_link,
         answer_pre_checkout_query,

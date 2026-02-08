@@ -1,6 +1,6 @@
 //! A full-featured framework that empowers you to easily build [Telegram bots]
 //! using [Rust]. It handles all the difficult stuff so you can focus only on
-//! your business logic. Currently, version `9.1` of [Telegram Bot API] is
+//! your business logic. Currently, version `9.3` of [Telegram Bot API] is
 //! supported.
 //!
 //! For a high-level overview, see [our GitHub repository](https://github.com/teloxide/teloxide).
@@ -125,7 +125,7 @@
 // $ cargo docs --open
 // ```
 // (docs is an alias from `.cargo/config.toml`)
-#![cfg_attr(all(docsrs, feature = "nightly"), feature(doc_cfg, doc_auto_cfg))]
+#![cfg_attr(all(docsrs, feature = "nightly"), feature(doc_cfg))]
 #![forbid(unsafe_code)]
 #![warn(rustdoc::broken_intra_doc_links)]
 #![allow(clippy::match_bool)]

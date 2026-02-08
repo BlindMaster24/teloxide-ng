@@ -2,7 +2,7 @@
 
 use serde::Serialize;
 
-use crate::types::{Message, MessageId, Recipient, Seconds, ThreadId};
+use crate::types::{EffectId, Message, MessageId, Recipient, Seconds, ThreadId};
 
 impl_payload! {
     /// Use this method to forward messages of any kind. On success, the sent [`Message`] is returned.
@@ -30,6 +30,8 @@ impl_payload! {
             pub disable_notification: bool,
             /// Protects the contents of sent messages from forwarding and saving
             pub protect_content: bool,
+            /// Unique identifier of the message effect to be added to the message; for private chats only
+            pub message_effect_id: EffectId,
         }
     }
 }
