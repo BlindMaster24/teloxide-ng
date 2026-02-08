@@ -93,12 +93,15 @@ jobs:
           - rust: stable
             toolchain: stable
             features: "--features full"
+            skip_codegen_tests: "-- --skip local_macros::codegen_requester_forward --skip requests::requester::codegen_requester_methods"
           - rust: beta
             toolchain: beta
             features: "--features full"
+            skip_codegen_tests: "-- --skip local_macros::codegen_requester_forward --skip requests::requester::codegen_requester_methods"
           - rust: nightly
             toolchain: nightly
             features: "--features full nightly"
+            skip_codegen_tests: ""
 
     steps:
       - name: Checkout
@@ -135,7 +138,7 @@ jobs:
           PGPASSWORD: rewrite_it_in_rust
       - name: Test unit & integration tests
         run: |
-          cargo +${{ matrix.toolchain }} test --tests --verbose ${{ matrix.features }}
+          cargo +${{ matrix.toolchain }} test --tests --verbose ${{ matrix.features }} ${{ matrix.skip_codegen_tests }}
 
       - name: Test documentation tests
         run: |
