@@ -119,13 +119,13 @@ pub fn ensure_files_contents<'a>(
 pub fn replace_block(path: &Path, title: &str, new: &str) -> String {
     let file = fs::read_to_string(path).unwrap();
 
-    let start = format!("// START BLOCK {title}\n");
-    let end = format!("// END BLOCK {title}\n");
+    let start = format!("// START BLOCK {title}");
+    let end = format!("// END BLOCK {title}");
 
     let mut starts = vec![];
     let mut ends = vec![];
 
-    let searcher = AhoCorasick::new(&[start, end]).expect("Wrong block pattern");
+    let searcher = AhoCorasick::new([start.as_str(), end.as_str()]).expect("Wrong block pattern");
 
     for finding in searcher.find_iter(&file) {
         match finding.pattern().as_usize() {
@@ -139,7 +139,13 @@ pub fn replace_block(path: &Path, title: &str, new: &str) -> String {
 
     let start_offset = match &*starts {
         [] => panic!("Coulnd't find start of block {title} in {p}", p = path.display()),
-        [offset] => offset.end,
+        [offset] => {
+            let tail = &file[offset.end..];
+            match tail.find('\n') {
+                Some(newline_pos) => offset.end + newline_pos + 1,
+                None => file.len(),
+            }
+        }
         [..] => panic!(),
     };
 
