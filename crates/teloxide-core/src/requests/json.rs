@@ -1,11 +1,11 @@
 use std::future::IntoFuture;
 
-use serde::{de::DeserializeOwned, Serialize};
+use serde::{Serialize, de::DeserializeOwned};
 
 use crate::{
+    RequestError,
     bot::Bot,
     requests::{HasPayload, Payload, Request, ResponseResult},
-    RequestError,
 };
 
 /// A ready-to-send Telegram request whose payload is sent using [JSON].
@@ -35,7 +35,7 @@ where
     // (though critically, currently we have no
     // non-'static payloads)
     P: 'static,
-    P: Payload + Serialize,
+    P: Payload + Serialize + Clone + std::marker::Send,
     P::Output: DeserializeOwned,
 {
     type Err = RequestError;
@@ -54,7 +54,7 @@ where
 impl<P> IntoFuture for JsonRequest<P>
 where
     P: 'static,
-    P: Payload + Serialize,
+    P: Payload + Serialize + Clone + std::marker::Send,
     P::Output: DeserializeOwned,
 {
     type Output = Result<P::Output, RequestError>;
@@ -96,22 +96,23 @@ impl<P: Payload + Serialize> core::ops::DerefMut for JsonRequest<P> {
 
 req_future! {
     def: |it: JsonRequest<U>| {
-        it.bot.execute_json(&it.payload)
+        async move { it.bot.execute_json(&it.payload).await }
     }
     pub Send<U> (inner0) -> ResponseResult<U::Output>
     where
         U: 'static,
-        U: Payload + Serialize,
+        U: Payload + Serialize + std::marker::Send,
         U::Output: DeserializeOwned,
 }
 
 req_future! {
     def: |it: &JsonRequest<U>| {
-        it.bot.execute_json(&it.payload)
+        let it = it.clone();
+        async move { it.bot.execute_json(&it.payload).await }
     }
     pub SendRef<U> (inner1) -> ResponseResult<U::Output>
     where
         U: 'static,
-        U: Payload + Serialize,
+        U: Payload + Serialize + Clone + std::marker::Send,
         U::Output: DeserializeOwned,
 }

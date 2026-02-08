@@ -1,11 +1,11 @@
 use std::future::IntoFuture;
 
-use serde::{de::DeserializeOwned, Serialize};
+use serde::{Serialize, de::DeserializeOwned};
 
 use crate::{
+    RequestError,
     bot::Bot,
     requests::{HasPayload, MultipartPayload, Payload, Request, ResponseResult},
-    RequestError,
 };
 
 /// A ready-to-send Telegram request whose payload is sent using
@@ -36,7 +36,7 @@ where
     // (though critically, currently we have no
     // non-'static payloads)
     P: 'static,
-    P: Payload + MultipartPayload + Serialize,
+    P: Payload + MultipartPayload + Serialize + Clone + std::marker::Send,
     P::Output: DeserializeOwned,
 {
     type Err = RequestError;
@@ -55,7 +55,7 @@ where
 impl<P> IntoFuture for MultipartRequest<P>
 where
     P: 'static,
-    P: Payload + MultipartPayload + Serialize,
+    P: Payload + MultipartPayload + Serialize + Clone + std::marker::Send,
     P::Output: DeserializeOwned,
 {
     type Output = Result<P::Output, RequestError>;
@@ -107,22 +107,26 @@ where
 
 req_future! {
     def: |it: MultipartRequest<U>| {
-        it.bot.execute_multipart(&mut {it.payload})
+        let bot = it.bot;
+        let mut payload = it.payload;
+        async move { bot.execute_multipart(&mut payload).await }
     }
     pub Send<U> (inner0) -> ResponseResult<U::Output>
     where
         U: 'static,
-        U: Payload + MultipartPayload + Serialize,
+        U: Payload + MultipartPayload + Serialize + std::marker::Send,
         U::Output: DeserializeOwned,
 }
 
 req_future! {
     def: |it: &MultipartRequest<U>| {
-        it.bot.execute_multipart_ref(&it.payload)
+        let bot = it.bot.clone();
+        let payload = it.payload.clone();
+        async move { bot.execute_multipart_ref(&payload).await }
     }
     pub SendRef<U> (inner1) -> ResponseResult<U::Output>
     where
         U: 'static,
-        U: Payload + MultipartPayload + Serialize,
+        U: Payload + MultipartPayload + Serialize + Clone + std::marker::Send,
         U::Output: DeserializeOwned,
 }
