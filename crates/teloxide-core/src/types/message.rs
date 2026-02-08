@@ -863,11 +863,11 @@ mod getters {
     use std::ops::Deref;
 
     use crate::types::{
-        self, message::MessageKind::*, Chat, ChatId, ChatMigration, EffectId, LinkPreviewOptions,
-        MaybeInaccessibleMessage, MediaAnimation, MediaAudio, MediaChecklist, MediaContact,
-        MediaDocument, MediaGame, MediaKind, MediaLocation, MediaPaid, MediaPhoto, MediaPoll,
-        MediaSticker, MediaStory, MediaText, MediaVenue, MediaVideo, MediaVideoNote, MediaVoice,
-        Message, MessageChannelChatCreated, MessageChatShared, MessageChecklistTasksAdded,
+        self, Chat, ChatId, ChatMigration, EffectId, LinkPreviewOptions, MaybeInaccessibleMessage,
+        MediaAnimation, MediaAudio, MediaChecklist, MediaContact, MediaDocument, MediaGame,
+        MediaKind, MediaLocation, MediaPaid, MediaPhoto, MediaPoll, MediaSticker, MediaStory,
+        MediaText, MediaVenue, MediaVideo, MediaVideoNote, MediaVoice, Message,
+        MessageChannelChatCreated, MessageChatShared, MessageChecklistTasksAdded,
         MessageChecklistTasksDone, MessageCommon, MessageConnectedWebsite, MessageDeleteChatPhoto,
         MessageDice, MessageDirectMessagePriceChanged, MessageEntity, MessageGiftUpgradeSent,
         MessageGroupChatCreated, MessageId, MessageInvoice, MessageLeftChatMember,
@@ -875,6 +875,7 @@ mod getters {
         MessagePassportData, MessagePinned, MessageProximityAlertTriggered,
         MessageSuccessfulPayment, MessageSupergroupChatCreated, MessageUsersShared,
         MessageVideoChatParticipantsInvited, PhotoSize, Story, TextQuote, User,
+        message::MessageKind::*,
     };
 
     use super::{

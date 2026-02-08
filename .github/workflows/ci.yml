@@ -204,4 +204,4 @@ jobs:
 
       - name: rustdoc
         run: |
-          cargo docs # from .cargo/config.toml
+          cargo docs --no-deps # from .cargo/config.toml
