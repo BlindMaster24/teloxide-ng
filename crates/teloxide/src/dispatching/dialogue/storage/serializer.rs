@@ -67,13 +67,16 @@ impl<D> Serializer<D> for Bincode
 where
     D: Serialize + DeserializeOwned,
 {
-    type Error = bincode::Error;
+    type Error = Box<dyn std::error::Error + Send + Sync>;
 
     fn serialize(&self, val: &D) -> Result<Vec<u8>, Self::Error> {
-        bincode::serialize(val)
+        bincode::serde::encode_to_vec(val, bincode::config::standard())
+            .map_err(|err| Box::new(err) as Self::Error)
     }
 
     fn deserialize(&self, data: &[u8]) -> Result<D, Self::Error> {
-        bincode::deserialize(data)
+        bincode::serde::decode_from_slice(data, bincode::config::standard())
+            .map(|(value, _)| value)
+            .map_err(|err| Box::new(err) as Self::Error)
     }
 }

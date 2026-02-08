@@ -200,6 +200,7 @@ where
         copy_message,
         copy_messages,
         send_message,
+        send_message_draft,
         send_photo,
         send_audio,
         send_document,
@@ -296,6 +297,8 @@ where
         edit_message_reply_markup,
         edit_message_reply_markup_inline,
         stop_poll,
+        approve_suggested_post,
+        decline_suggested_post,
         delete_message,
         delete_messages,
         send_sticker,
@@ -333,12 +336,15 @@ where
         get_business_account_star_balance,
         transfer_business_account_stars,
         get_business_account_gifts,
+        get_user_gifts,
+        get_chat_gifts,
         convert_gift_to_stars,
         upgrade_gift,
         transfer_gift,
         post_story,
         edit_story,
         delete_story,
+        repost_story,
         send_invoice,
         create_invoice_link,
         answer_shipping_query,
@@ -382,6 +388,13 @@ trait ErasableRequester<'a> {
         chat_id: Recipient,
         text: String,
     ) -> ErasedRequest<'a, SendMessage, Self::Err>;
+
+    fn send_message_draft(
+        &self,
+        chat_id: ChatId,
+        draft_id: u32,
+        text: String,
+    ) -> ErasedRequest<'a, SendMessageDraft, Self::Err>;
 
     fn forward_message(
         &self,
@@ -934,6 +947,18 @@ trait ErasableRequester<'a> {
         message_id: MessageId,
     ) -> ErasedRequest<'a, StopPoll, Self::Err>;
 
+    fn approve_suggested_post(
+        &self,
+        chat_id: ChatId,
+        message_id: MessageId,
+    ) -> ErasedRequest<'a, ApproveSuggestedPost, Self::Err>;
+
+    fn decline_suggested_post(
+        &self,
+        chat_id: ChatId,
+        message_id: MessageId,
+    ) -> ErasedRequest<'a, DeclineSuggestedPost, Self::Err>;
+
     fn delete_message(
         &self,
         chat_id: Recipient,
@@ -1126,6 +1151,10 @@ trait ErasableRequester<'a> {
         business_connection_id: BusinessConnectionId,
     ) -> ErasedRequest<'a, GetBusinessAccountGifts, Self::Err>;
 
+    fn get_user_gifts(&self, user_id: UserId) -> ErasedRequest<'a, GetUserGifts, Self::Err>;
+
+    fn get_chat_gifts(&self, chat_id: Recipient) -> ErasedRequest<'a, GetChatGifts, Self::Err>;
+
     fn convert_gift_to_stars(
         &self,
         business_connection_id: BusinessConnectionId,
@@ -1164,6 +1193,14 @@ trait ErasableRequester<'a> {
         business_connection_id: BusinessConnectionId,
         story_id: StoryId,
     ) -> ErasedRequest<'a, DeleteStory, Self::Err>;
+
+    fn repost_story(
+        &self,
+        business_connection_id: BusinessConnectionId,
+        from_chat_id: ChatId,
+        from_story_id: StoryId,
+        active_period: Seconds,
+    ) -> ErasedRequest<'a, RepostStory, Self::Err>;
 
     fn set_business_account_bio(
         &self,
@@ -1292,6 +1329,15 @@ where
         text: String,
     ) -> ErasedRequest<'a, SendMessage, Self::Err> {
         Requester::send_message(self, chat_id, text).erase()
+    }
+
+    fn send_message_draft(
+        &self,
+        chat_id: ChatId,
+        draft_id: u32,
+        text: String,
+    ) -> ErasedRequest<'a, SendMessageDraft, Self::Err> {
+        Requester::send_message_draft(self, chat_id, draft_id, text).erase()
     }
 
     fn forward_message(
@@ -2064,6 +2110,22 @@ where
         Requester::stop_poll(self, chat_id, message_id).erase()
     }
 
+    fn approve_suggested_post(
+        &self,
+        chat_id: ChatId,
+        message_id: MessageId,
+    ) -> ErasedRequest<'a, ApproveSuggestedPost, Self::Err> {
+        Requester::approve_suggested_post(self, chat_id, message_id).erase()
+    }
+
+    fn decline_suggested_post(
+        &self,
+        chat_id: ChatId,
+        message_id: MessageId,
+    ) -> ErasedRequest<'a, DeclineSuggestedPost, Self::Err> {
+        Requester::decline_suggested_post(self, chat_id, message_id).erase()
+    }
+
     fn delete_message(
         &self,
         chat_id: Recipient,
@@ -2344,6 +2406,14 @@ where
         Requester::get_business_account_gifts(self, business_connection_id).erase()
     }
 
+    fn get_user_gifts(&self, user_id: UserId) -> ErasedRequest<'a, GetUserGifts, Self::Err> {
+        Requester::get_user_gifts(self, user_id).erase()
+    }
+
+    fn get_chat_gifts(&self, chat_id: Recipient) -> ErasedRequest<'a, GetChatGifts, Self::Err> {
+        Requester::get_chat_gifts(self, chat_id).erase()
+    }
+
     fn convert_gift_to_stars(
         &self,
         business_connection_id: BusinessConnectionId,
@@ -2394,6 +2464,23 @@ where
         story_id: StoryId,
     ) -> ErasedRequest<'a, DeleteStory, Self::Err> {
         Requester::delete_story(self, business_connection_id, story_id).erase()
+    }
+
+    fn repost_story(
+        &self,
+        business_connection_id: BusinessConnectionId,
+        from_chat_id: ChatId,
+        from_story_id: StoryId,
+        active_period: Seconds,
+    ) -> ErasedRequest<'a, RepostStory, Self::Err> {
+        Requester::repost_story(
+            self,
+            business_connection_id,
+            from_chat_id,
+            from_story_id,
+            active_period,
+        )
+        .erase()
     }
 
     fn send_invoice(
