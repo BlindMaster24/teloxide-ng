@@ -869,12 +869,12 @@ mod getters {
         MediaSticker, MediaStory, MediaText, MediaVenue, MediaVideo, MediaVideoNote, MediaVoice,
         Message, MessageChannelChatCreated, MessageChatShared, MessageChecklistTasksAdded,
         MessageChecklistTasksDone, MessageCommon, MessageConnectedWebsite, MessageDeleteChatPhoto,
-        MessageDice, MessageDirectMessagePriceChanged, MessageEntity, MessageGroupChatCreated,
-        MessageId, MessageInvoice, MessageLeftChatMember, MessageNewChatMembers,
-        MessageNewChatPhoto, MessageNewChatTitle, MessageOrigin, MessagePassportData,
-        MessagePinned, MessageProximityAlertTriggered, MessageSuccessfulPayment,
-        MessageSupergroupChatCreated, MessageUsersShared, MessageVideoChatParticipantsInvited,
-        MessageGiftUpgradeSent, PhotoSize, Story, TextQuote, User,
+        MessageDice, MessageDirectMessagePriceChanged, MessageEntity, MessageGiftUpgradeSent,
+        MessageGroupChatCreated, MessageId, MessageInvoice, MessageLeftChatMember,
+        MessageNewChatMembers, MessageNewChatPhoto, MessageNewChatTitle, MessageOrigin,
+        MessagePassportData, MessagePinned, MessageProximityAlertTriggered,
+        MessageSuccessfulPayment, MessageSupergroupChatCreated, MessageUsersShared,
+        MessageVideoChatParticipantsInvited, PhotoSize, Story, TextQuote, User,
     };
 
     use super::{
