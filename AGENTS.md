@@ -113,6 +113,7 @@ Before publishing new crate versions:
    - `cargo test --doc --features "full nightly"`
 4. Run `just check-no-email`.
 5. If codegen tests touched files (`requester.rs`, `local_macros.rs`), re-run tests once more and commit generated updates.
+6. If a codegen run is interrupted, remove temporary files in `crates/teloxide-core-ng/src/__codegen_tmp_*.rs` before final checks.
 
 ## Style and Stability Rules
 - Rust 2024 edition, MSRV `1.85`

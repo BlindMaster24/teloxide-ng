@@ -64,6 +64,8 @@ Run from workspace root.
   - `cargo test -p teloxide-core-ng --tests --features "full nightly"`
   - run it a second time if the first run updated sources
 - Keep generated outputs committed when `src/local_macros.rs` or `src/requests/requester.rs` are rewritten by tests.
+- If a run is interrupted, clean temporary formatter artifacts:
+  - `git clean -f crates/teloxide-core-ng/src/__codegen_tmp_*.rs`
 
 For CI parity, also run toolchain-specific commands with `+stable`, `+beta`, `+nightly`.
 
