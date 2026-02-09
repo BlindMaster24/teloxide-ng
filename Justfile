@@ -19,8 +19,13 @@ test:
 docs:
     cargo docs
 
+# Ensure repository does not contain email addresses
+check-no-email:
+    if rg -n --hidden -g '!.git' -g '!target' -e "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}" .; then echo "Email addresses found in repository files. Remove them before commit."; exit 1; else echo "No email addresses found."; fi
+
 # Run all checks we do in CI (lint + test + docs)
 ci:
+    just check-no-email
     just lint
     just test
     just docs

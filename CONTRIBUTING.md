@@ -118,6 +118,21 @@ cargo test --features "full nightly"
 cargo docs
 ```
 
+### Repository hygiene
+
+The repository follows a strict no-email policy for tracked files.
+
+- Run `just check-no-email` locally before opening a PR.
+- CI runs the same check in the `check-no-email` job.
+- If a service requires direct email metadata in config files, prefer disabling that integration or using a non-email identifier.
+
+### Rust toolchain config (`rust-toolchain.toml`)
+
+`rust-toolchain.toml` applies to the whole repository and is not related to personal profiles.
+
+- `channel = "nightly"` is used to match CI/docs/lint behavior.
+- `profile = "minimal"` is a rustup installation profile to install only required components by default.
+
 ### Making a TBA update
 
 Once again, if you want to make a major update, like a TBA update, you need to contact other developers to not waste your and other developers time!

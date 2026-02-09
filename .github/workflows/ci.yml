@@ -32,6 +32,7 @@ jobs:
     if: always()
 
     needs:
+      - check-no-email
       - fmt
       - test
       - check-examples
@@ -64,6 +65,23 @@ jobs:
       - name: Check formatting
         run: |
           cargo fmt --all -- --check
+
+  check-no-email:
+    name: check-no-email
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Ensure repository contains no email addresses
+        run: |
+          if rg -n --hidden -g '!.git' -g '!target' -e "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}" .; then
+            echo "Email addresses found in repository files."
+            exit 1
+          else
+            echo "No email addresses found."
+          fi
 
   test:
     name: Test

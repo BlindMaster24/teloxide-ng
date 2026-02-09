@@ -126,3 +126,15 @@ Breaking changes must be marked with `[**BC**]` in changelog and reflected in `M
 - Use environment variables
 - Avoid logging sensitive payloads
 - Treat proc-macro diagnostics and unsafe-related edits as high-priority review areas
+
+## No-Email Policy
+- Do not commit email addresses to repository files.
+- Local enforcement: run `just check-no-email`.
+- CI enforcement: workflow job `check-no-email` is required by `ci-pass`.
+- If a tool or config requires contact metadata, prefer non-email identifiers or remove that integration.
+
+## Toolchain Profile Clarification
+`rust-toolchain.toml` is repository-wide rustup configuration, not a user profile system.
+
+- `channel = "nightly"`: pins toolchain expected by CI/docs/lint flow.
+- `profile = "minimal"`: rustup install profile (fewer default components), keeps environments lean and reproducible.
