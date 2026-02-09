@@ -1,4 +1,4 @@
-# `dptree` guide
+﻿# `dptree` guide
 
 `teloxide` heavily relies on the [`dptree`] crate, but it might take some time to understand how to use it. `dptree` handles where the incoming update will go, and also what values (dependencies) the handlers will receive.
 
@@ -6,7 +6,7 @@
 
 This guide assumes you have some basic knowledge of `teloxide` (see `README.md` and the [examples]), but you have some troubles with understanding `dptree`, which this tutorial will guide you through.
 
-[examples]: crates/teloxide/examples/
+[examples]: crates/teloxide-ng/examples/
 
 Let's start from the beginning:
 
@@ -266,3 +266,4 @@ let handler = dptree::map_async(/* ... */).map_async(/* ... */).filter(/* ... */
 7. There are a lot of premade filters in `teloxide`, like `.filter_command()`, `.filter_mention()`, `Message::filter_poll()` and many others -- you can look them up in the documentation!
 
 If you find something you got stuck on with `dptree`, please make a PR that adds an explanation to this guide -- this will help others a lot!
+

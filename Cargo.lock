@@ -2749,43 +2749,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "20f34339676cdcab560c9a82300c4c2581f68b9369aedf0fae86f2ff9565ff3e"
 
 [[package]]
-name = "teloxide"
-version = "0.17.0"
-dependencies = [
- "aquamarine",
- "axum",
- "bincode-next",
- "bytes",
- "chrono",
- "deadpool-redis",
- "derive_more",
- "dptree",
- "either",
- "futures",
- "log",
- "mime",
- "pin-project",
- "pretty_env_logger",
- "rand 0.10.0",
- "reqwest",
- "serde",
- "serde_cbor",
- "serde_json",
- "sqlx",
- "teloxide-core",
- "teloxide-macros",
- "thiserror 2.0.18",
- "tokio",
- "tokio-stream",
- "tokio-util",
- "tower",
- "tower-http",
- "tracing",
- "url",
-]
-
-[[package]]
-name = "teloxide-core"
+name = "teloxide-core-ng"
 version = "0.13.0"
 dependencies = [
  "aho-corasick",
@@ -2824,13 +2788,49 @@ dependencies = [
 ]
 
 [[package]]
-name = "teloxide-macros"
+name = "teloxide-macros-ng"
 version = "0.10.0"
 dependencies = [
  "heck",
  "proc-macro2",
  "quote",
  "syn",
+]
+
+[[package]]
+name = "teloxide-ng"
+version = "0.17.0"
+dependencies = [
+ "aquamarine",
+ "axum",
+ "bincode-next",
+ "bytes",
+ "chrono",
+ "deadpool-redis",
+ "derive_more",
+ "dptree",
+ "either",
+ "futures",
+ "log",
+ "mime",
+ "pin-project",
+ "pretty_env_logger",
+ "rand 0.10.0",
+ "reqwest",
+ "serde",
+ "serde_cbor",
+ "serde_json",
+ "sqlx",
+ "teloxide-core-ng",
+ "teloxide-macros-ng",
+ "thiserror 2.0.18",
+ "tokio",
+ "tokio-stream",
+ "tokio-util",
+ "tower",
+ "tower-http",
+ "tracing",
+ "url",
 ]
 
 [[package]]

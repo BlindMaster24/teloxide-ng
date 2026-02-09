@@ -1,4 +1,4 @@
-on:
+﻿on:
   push:
     branches: [ master ]
   pull_request:
@@ -17,7 +17,7 @@ env:
   RUSTUP_MAX_RETRIES: 10
 
   # When updating this, also update:
-  # - crates/teloxide-core/src/codegen.rs
+  # - crates/teloxide-core-ng/src/codegen.rs
   # - rust-toolchain.toml
   # - below in the test matrix
   rust_nightly: nightly
@@ -226,3 +226,5 @@ jobs:
       - name: rustdoc
         run: |
           cargo docs --no-deps # from .cargo/config.toml
+
+

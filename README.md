@@ -1,14 +1,14 @@
-<div align="center">
+﻿<div align="center">
   <img src="https://github.com/teloxide/teloxide/blob/master/media/teloxide-logo.png?raw=true" width="250"/>
-  <h1><code>teloxide</code></h1>
-  <a href="https://docs.rs/teloxide/">
-    <img src="https://docs.rs/teloxide/badge.svg">
+  <h1><code>teloxide-ng</code></h1>
+  <a href="https://docs.rs/teloxide-ng/">
+    <img src="https://docs.rs/teloxide-ng/badge.svg">
   </a>
   <a href="https://github.com/teloxide/teloxide/actions">
     <img src="https://github.com/teloxide/teloxide/workflows/Continuous%20integration/badge.svg">
   </a>
-  <a href="https://crates.io/crates/teloxide">
-    <img src="https://img.shields.io/crates/v/teloxide.svg">
+  <a href="https://crates.io/crates/teloxide-ng">
+    <img src="https://img.shields.io/crates/v/teloxide-ng.svg">
   </a>
   <a href="https://core.telegram.org/bots/api">
     <img src="https://img.shields.io/badge/API%20coverage-Up%20to%209.1%20(inclusively)-green.svg">
@@ -38,7 +38,7 @@
 [Redis]: https://redis.io/
 [Sqlite]: https://www.sqlite.org
 
- - **Strongly typed commands.** Define bot commands as an `enum` and `teloxide` will parse them automatically — just like JSON structures in [`serde-json`] and command-line arguments in [`structopt`].
+ - **Strongly typed commands.** Define bot commands as an `enum` and `teloxide` will parse them automatically â€” just like JSON structures in [`serde-json`] and command-line arguments in [`structopt`].
 
 [`structopt`]: https://github.com/TeXitoi/structopt
 [`serde-json`]: https://github.com/serde-rs/json
@@ -73,7 +73,7 @@ $ rustup override set nightly
  5. Run `cargo new my_bot`, enter the directory and put these lines into your `Cargo.toml`:
 ```toml
 [dependencies]
-teloxide = { version = "0.17.0", features = ["macros"] }
+teloxide-ng = { version = "0.17.0", features = ["macros"] }
 log = "0.4"
 pretty_env_logger = "0.5"
 tokio = { version =  "1.8", features = ["rt-multi-thread", "macros"] }
@@ -82,7 +82,7 @@ tokio = { version =  "1.8", features = ["rt-multi-thread", "macros"] }
 _Note: if there is functionality in master that is not released yet, you can pull the Git repository as follows:_
 
 ```toml
-teloxide = { git = "https://github.com/teloxide/teloxide.git", features = ["macros"] }
+teloxide-ng = { git = "https://github.com/teloxide/teloxide.git", features = ["macros"] }
 ```
 
 ## API overview
@@ -91,10 +91,10 @@ teloxide = { git = "https://github.com/teloxide/teloxide.git", features = ["macr
 
 This bot replies with a dice to each received message:
 
-[[`examples/throw_dice.rs`](crates/teloxide/examples/throw_dice.rs)]
+[[`examples/throw_dice.rs`](crates/teloxide-ng/examples/throw_dice.rs)]
 
 ```rust,no_run
-use teloxide::prelude::*;
+use teloxide_ng::prelude::*;
 
 #[tokio::main]
 async fn main() {
@@ -103,7 +103,7 @@ async fn main() {
 
     let bot = Bot::from_env();
 
-    teloxide::repl(bot, |bot: Bot, msg: Message| async move {
+    teloxide_ng::repl(bot, |bot: Bot, msg: Message| async move {
         bot.send_dice(msg.chat.id).await?;
         Ok(())
     })
@@ -126,10 +126,10 @@ Commands are strongly typed and defined declaratively, similar to how we define 
 [structopt]: https://docs.rs/structopt/0.3.9/structopt/
 [serde-json]: https://github.com/serde-rs/json
 
-[[`examples/command.rs`](crates/teloxide/examples/command.rs)]
+[[`examples/command.rs`](crates/teloxide-ng/examples/command.rs)]
 
 ```rust,no_run
-use teloxide::{prelude::*, utils::command::BotCommands};
+use teloxide_ng::{prelude::*, utils::command::BotCommands};
 
 #[tokio::main]
 async fn main() {
@@ -180,10 +180,10 @@ A dialogue is typically described by an enumeration where each variant is one po
 
 Below is a bot that asks you three questions and then sends the answers back to you:
 
-[[`examples/dialogue.rs`](crates/teloxide/examples/dialogue.rs)]
+[[`examples/dialogue.rs`](crates/teloxide-ng/examples/dialogue.rs)]
 
 ```rust,ignore
-use teloxide::{dispatching::dialogue::InMemStorage, prelude::*};
+use teloxide_ng::{dispatching::dialogue::InMemStorage, prelude::*};
 
 type MyDialogue = Dialogue<State, InMemStorage<State>>;
 type HandlerResult = Result<(), Box<dyn std::error::Error + Send + Sync>>;
@@ -291,7 +291,7 @@ async fn receive_location(
     <img src="https://github.com/teloxide/teloxide/blob/master/media/dialogue.gif?raw=true" width="420" />
 </div>
 
-[More examples >>](crates/teloxide/examples/)
+[More examples >>](crates/teloxide-ng/examples/)
 
 ## Testing
 
@@ -302,8 +302,8 @@ The community has made a crate called [`teloxide_tests`](https://github.com/Last
 ## Tutorials
 
  - [_`dptree` starter guide with teloxide_](https://github.com/teloxide/teloxide/blob/master/DPTREE_GUIDE.md)
- - [_"Migrating my family finance bot from Python to Rust (teloxide) because I am tired of exceptions (part 1)"_](https://web.archive.org/web/20230130112018/https://trkohler.com/posts/i-migrated-my-family-finance-bot-from-python-to-rust-because-i-am-tired-of-exceptions/) by Troy Köhler.
- - [_"Migrating my family finance bot from Python to Rust (teloxide) [part 2]"_](https://web.archive.org/web/20240529200929/https://trkohler.com/posts/migrating-my-family-finance-bot-from-python-to-rust-teloxide-part-2/) by Troy Köhler.
+ - [_"Migrating my family finance bot from Python to Rust (teloxide) because I am tired of exceptions (part 1)"_](https://web.archive.org/web/20230130112018/https://trkohler.com/posts/i-migrated-my-family-finance-bot-from-python-to-rust-because-i-am-tired-of-exceptions/) by Troy KÃ¶hler.
+ - [_"Migrating my family finance bot from Python to Rust (teloxide) [part 2]"_](https://web.archive.org/web/20240529200929/https://trkohler.com/posts/migrating-my-family-finance-bot-from-python-to-rust-teloxide-part-2/) by Troy KÃ¶hler.
 
 ## FAQ
 
@@ -325,11 +325,11 @@ A: No, only the bots API.
 
 **Q: Can I use webhooks?**
 
-A: You can! `teloxide` has a built-in support for webhooks in `dispatching::update_listeners::webhooks` module. See how it's used in [`examples/ngrok_ping_pong_bot.rs`](crates/teloxide/examples/ngrok_ping_pong.rs) and [`examples/heroku_ping_pong_bot.rs`](crates/teloxide/examples/heroku_ping_pong.rs).
+A: You can! `teloxide-ng` has built-in support for webhooks in `dispatching::update_listeners::webhooks` module. See how it's used in [`examples/ngrok_ping_pong_bot.rs`](crates/teloxide-ng/examples/ngrok_ping_pong.rs) and [`examples/heroku_ping_pong_bot.rs`](crates/teloxide-ng/examples/heroku_ping_pong.rs).
 
 **Q: Can I handle both callback queries and messages within a single dialogue?**
 
-A: Yes, see [`examples/purchase.rs`](crates/teloxide/examples/purchase.rs).
+A: Yes, see [`examples/purchase.rs`](crates/teloxide-ng/examples/purchase.rs).
 
 **Q: How can I organize complex logic?**
 
@@ -348,24 +348,26 @@ A: Check out [@TheAwiteb]'s [WebApp `teloxide` example].
 
 Feel free to propose your own bot to our collection!
 
- - [`raine/tgreddit`](https://github.com/raine/tgreddit) — A bot that sends the top posts of your favorite subreddits to Telegram.
- - [`magnickolas/remindee-bot`](https://github.com/magnickolas/remindee-bot) — Telegram bot for managing reminders.
- - [`WaffleLapkin/crate_upd_bot`](https://github.com/WaffleLapkin/crate_upd_bot) — A bot that notifies about crate updates.
- - [`mattrighetti/GroupActivityBot`](https://github.com/mattrighetti/group-activity-bot-rs) — Telegram bot that keeps track of user activity in groups.
- - [`alenpaul2001/AurSearchBot`](https://gitlab.com/alenpaul2001/aursearchbot) — Telegram bot for searching in Arch User Repository (AUR).
- - [`ArtHome12/vzmuinebot`](https://github.com/ArtHome12/vzmuinebot) — Telegram bot for food menu navigate.
- - [`studiedlist/EddieBot`](https://gitlab.com/studiedlist/eddie-bot) — Chatting bot with several entertainment features.
- - [`modos189/tg_blackbox_bot`](https://gitlab.com/modos189/tg_blackbox_bot) — Anonymous feedback for your Telegram project.
- - [`0xNima/spacecraft`](https://github.com/0xNima/spacecraft) — Yet another telegram bot to downloading Twitter spaces.
- - [`0xNima/Twideo`](https://github.com/0xNima/Twideo) — Simple Telegram Bot for downloading videos from Twitter via their links.
- - [`mattrighetti/libgen-bot-rs`](https://github.com/mattrighetti/libgen-bot-rs) — Telegram bot to interface with libgen.
- - [`zamazan4ik/npaperbot-telegram`](https://github.com/zamazan4ik/npaperbot-telegram) — Telegram bot for searching via C++ proposals.
- - [`studentenherz/dlebot`](https://github.com/studentenherz/dlebot) — A bot to query definitions of words from the Spanish Language Dictionary.
- - [`fr0staman/fr0staman_bot`](https://github.com/fr0staman/fr0staman_bot) — Feature rich Telegram game-like bot with pigs 🐽.
- - [`franciscofigueira/transferBot`](https://github.com/franciscofigueira/transferBot) — Telegram bot that notifies of crypto token transfers.
+ - [`raine/tgreddit`](https://github.com/raine/tgreddit) â€” A bot that sends the top posts of your favorite subreddits to Telegram.
+ - [`magnickolas/remindee-bot`](https://github.com/magnickolas/remindee-bot) â€” Telegram bot for managing reminders.
+ - [`WaffleLapkin/crate_upd_bot`](https://github.com/WaffleLapkin/crate_upd_bot) â€” A bot that notifies about crate updates.
+ - [`mattrighetti/GroupActivityBot`](https://github.com/mattrighetti/group-activity-bot-rs) â€” Telegram bot that keeps track of user activity in groups.
+ - [`alenpaul2001/AurSearchBot`](https://gitlab.com/alenpaul2001/aursearchbot) â€” Telegram bot for searching in Arch User Repository (AUR).
+ - [`ArtHome12/vzmuinebot`](https://github.com/ArtHome12/vzmuinebot) â€” Telegram bot for food menu navigate.
+ - [`studiedlist/EddieBot`](https://gitlab.com/studiedlist/eddie-bot) â€” Chatting bot with several entertainment features.
+ - [`modos189/tg_blackbox_bot`](https://gitlab.com/modos189/tg_blackbox_bot) â€” Anonymous feedback for your Telegram project.
+ - [`0xNima/spacecraft`](https://github.com/0xNima/spacecraft) â€” Yet another telegram bot to downloading Twitter spaces.
+ - [`0xNima/Twideo`](https://github.com/0xNima/Twideo) â€” Simple Telegram Bot for downloading videos from Twitter via their links.
+ - [`mattrighetti/libgen-bot-rs`](https://github.com/mattrighetti/libgen-bot-rs) â€” Telegram bot to interface with libgen.
+ - [`zamazan4ik/npaperbot-telegram`](https://github.com/zamazan4ik/npaperbot-telegram) â€” Telegram bot for searching via C++ proposals.
+ - [`studentenherz/dlebot`](https://github.com/studentenherz/dlebot) â€” A bot to query definitions of words from the Spanish Language Dictionary.
+ - [`fr0staman/fr0staman_bot`](https://github.com/fr0staman/fr0staman_bot) â€” Feature rich Telegram game-like bot with pigs ðŸ½.
+ - [`franciscofigueira/transferBot`](https://github.com/franciscofigueira/transferBot) â€” Telegram bot that notifies of crypto token transfers.
 
 See [2500+ other public repositories using `teloxide` >>](https://github.com/teloxide/teloxide/network/dependents)
 
 ## Contributing
 
 See [`CONRIBUTING.md`](CONTRIBUTING.md).
+
+

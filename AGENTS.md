@@ -3,9 +3,9 @@
 ## Purpose
 This document is the source of truth for contributor workflow at workspace level. The repository has three crates with different responsibilities:
 
-- `crates/teloxide`
-- `crates/teloxide-core`
-- `crates/teloxide-macros`
+- `crates/teloxide-ng`
+- `crates/teloxide-core-ng`
+- `crates/teloxide-macros-ng`
 
 Use this file first, then follow crate-specific `AGENTS.md` in the crate you edit.
 
@@ -32,9 +32,9 @@ Ask before:
 For small local fixes inside one crate, proceed directly.
 
 ## Workspace Layout
-- `crates/teloxide`: high-level framework APIs, dispatching, listeners, utils, integration tests, examples
-- `crates/teloxide-core`: Telegram Bot API models/payloads/requests/net/adaptors/codegen inputs
-- `crates/teloxide-macros`: procedural macros used by `teloxide`
+- `crates/teloxide-ng`: high-level framework APIs, dispatching, listeners, utils, integration tests, examples
+- `crates/teloxide-core-ng`: Telegram Bot API models/payloads/requests/net/adaptors/codegen inputs
+- `crates/teloxide-macros-ng`: procedural macros used by `teloxide-ng`
 - `.github/workflows/ci.yml`: CI source of truth
 - `.cargo/config.toml`: cargo aliases (including `docs`)
 - `Justfile`: local shortcuts mirroring CI checks
@@ -138,3 +138,5 @@ Breaking changes must be marked with `[**BC**]` in changelog and reflected in `M
 
 - `channel = "nightly"`: pins toolchain expected by CI/docs/lint flow.
 - `profile = "minimal"`: rustup install profile (fewer default components), keeps environments lean and reproducible.
+
+

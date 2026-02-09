@@ -1,4 +1,4 @@
-This document describes breaking changes of `teloxide` crate, as well as the ways to update code.
+﻿This document describes breaking changes of `teloxide` crate, as well as the ways to update code.
 Note that the list of required changes is not fully exhaustive and it may lack something in rare cases.
 
 ## unreleased
@@ -81,7 +81,7 @@ type UpdHandler = Handler<
     'static,
 -    DependencyMap,
     core::result::Result<(), Box<dyn std::error::Error + Send + Sync + 'static>>,
-    teloxide::dispatching::DpHandlerDescription,
+    teloxide_ng::dispatching::DpHandlerDescription,
 >;
 ```
 
@@ -121,8 +121,8 @@ Also, note that our examples now contain code with "middlewares" that show how t
   - [`examples/middlewares.rs`]
   - [`examples/middlewares_fallible.rs`]
 
-[`examples/middlewares.rs`]: crates/teloxide/examples/middlewares.rs
-[`examples/middlewares_fallible.rs`]: crates/teloxide/examples/middlewares_fallible.rs
+[`examples/middlewares.rs`]: crates/teloxide-ng/examples/middlewares.rs
+[`examples/middlewares_fallible.rs`]: crates/teloxide-ng/examples/middlewares_fallible.rs
 
 ## 0.13 -> 0.14
 
@@ -235,12 +235,12 @@ The `rocksdb-storage` feature and associated items were removed. If you need to 
 We have introduced the new trait `CommandRepl` that replaces the old `commands_repl_(with_listener)` functions:
 
 ```diff
-- teloxide::commands_repl(bot, answer, Command::ty())
+- teloxide_ng::commands_repl(bot, answer, Command::ty())
 + Command::repl(bot, answer)
 ```
 
 ```diff
-- teloxide::commands_repl_with_listener(bot, answer, listener, Command::ty())
+- teloxide_ng::commands_repl_with_listener(bot, answer, listener, Command::ty())
 + Command::repl_with_listener(bot, answer, listener)
 ```
 
@@ -308,7 +308,7 @@ See `Sticker` documentation for more information about the new structure.
 You can now write `Ok(())` instead of `respond(())` at the end of closures provided to RELPs:
 
 ```diff
-teloxide::repl(bot, |bot: Bot, msg: Message| async move {
+teloxide_ng::repl(bot, |bot: Bot, msg: Message| async move {
     bot.send_dice(msg.chat.id).await?;
 -    respond(())
 +    Ok(())
@@ -316,13 +316,13 @@ teloxide::repl(bot, |bot: Bot, msg: Message| async move {
 .await;
 ```
 
-This is because REPLs now require the closure to return `RequestError` instead of a generic error type, so type inference works perfectly for a return value. If you use something other than `RequestError`, you can transfer your code to `teloxide::dispatching`, which still permits a generic error type.
+This is because REPLs now require the closure to return `RequestError` instead of a generic error type, so type inference works perfectly for a return value. If you use something other than `RequestError`, you can transfer your code to `teloxide_ng::dispatching`, which still permits a generic error type.
 
 "Stop tokens" were refactored, the trait is now removed and the types were renamed:
 
 ```diff
--use teloxide::dispatching::stop_token::{AsyncStopToken, AsyncStopFlag};
-+use teloxide::stop::{StopToken, StopFlag, mk_stop_token};
+-use teloxide_ng::dispatching::stop_token::{AsyncStopToken, AsyncStopFlag};
++use teloxide_ng::stop::{StopToken, StopFlag, mk_stop_token};
 
 -let (token, flag): (AsyncStopToken, AsyncStopFlag) = AsyncStopToken::new_pair();
 +let (token, flag): (StopToken, StopFlag) = mk_stop_token();
@@ -378,7 +378,7 @@ Some places now use `FileMeta` instead of `File`, you may need to change types.
 `Sticker` and `StickerSet` now has a `kind` field instead of `is_animated` and `is_video`:
 
 ```diff
-+use teloxide::types::StickerKind::*;
++use teloxide_ng::types::StickerKind::*;
 -match () {
 +match sticker.kind {
 -    _ if sticker.is_animated => /* handle animated */,
@@ -424,7 +424,7 @@ If you implement `UpdateListener` yourself, note that `StopToken` is now require
 
 `BotCommand` trait was renamed to `BotCommands`. `BotCommands::descriptions` not returns `CommandDescriptions` instead of `String`. To get string, you can call `.to_string()`.
 
-`#[derive(DialogueState)]` is deprecated in favour of `teloxide::handler!`, a more flexible API for dealing with dialogues. [`examples/dialogue.rs`](https://github.com/teloxide/teloxide/blob/03521bfd3d68f6f576dcc44b5473aaa5ce9b553f/examples/dialogue.rs) shows how to use it.
+`#[derive(DialogueState)]` is deprecated in favour of `teloxide_ng::handler!`, a more flexible API for dealing with dialogues. [`examples/dialogue.rs`](https://github.com/teloxide/teloxide/blob/03521bfd3d68f6f576dcc44b5473aaa5ce9b553f/examples/dialogue.rs) shows how to use it.
 
 [0.5 -> 0.6 migration guide]: #05---06
 
@@ -444,7 +444,7 @@ In order to make `Dispatcher` implement `Send`, `DispatcherBuilder::{default_han
 
 ### teloxide
 
-v0.6 of teloxide introduces a new dispatching model based on the [chain of responsibility pattern]. To use it, you need to replace `prelude` with `prelude2` and `dispatching` with `dispatching2`. Instead of using old REPLs, you should now use `teloxide::repls2`.
+v0.6 of teloxide introduces a new dispatching model based on the [chain of responsibility pattern]. To use it, you need to replace `prelude` with `prelude2` and `dispatching` with `dispatching2`. Instead of using old REPLs, you should now use `teloxide_ng::repls2`.
 
 The whole design is different from the previous one based on Tokio streams. In this section, we are only to address the most common usage scenarios.
 
@@ -620,3 +620,5 @@ Example fix:
 -let listener = polling_default(bot);
 +let listener = polling_default(bot).await;
 ```
+
+

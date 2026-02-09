@@ -1,3 +1,5 @@
+set windows-shell := ["powershell.exe", "-NoLogo", "-Command"]
+
 # Show available recipes
 help:
     just --list
@@ -8,7 +10,7 @@ fmt:
 
 # Check formatting and run clippy
 lint:
-    cargo fmt --all --check || (echo "Run 'just fmt' to fix formatting!" && exit 1)
+    cargo fmt --all --check
     cargo clippy --all-targets --features "full nightly"
 
 # Run tests
@@ -21,7 +23,7 @@ docs:
 
 # Ensure repository does not contain email addresses
 check-no-email:
-    if rg -n --hidden -g '!.git' -g '!target' -e "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}" .; then echo "Email addresses found in repository files. Remove them before commit."; exit 1; else echo "No email addresses found."; fi
+    python -c "import subprocess,sys; cmd=['rg','-n','--hidden','-g','!.git','-g','!target','-e',r'[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}','.']; r=subprocess.run(cmd); sys.exit(1 if r.returncode==0 else 0 if r.returncode==1 else r.returncode)"
 
 # Run all checks we do in CI (lint + test + docs)
 ci:
