@@ -16,6 +16,8 @@ pub(crate) mod schema;
 use std::{
     fs,
     path::{Path, PathBuf},
+    process::Command,
+    time::{SystemTime, UNIX_EPOCH},
 };
 
 use aho_corasick::AhoCorasick;
@@ -41,17 +43,34 @@ pub fn reformat(text: String) -> String {
     let sh = Shell::new().unwrap();
     ensure_rustfmt(&sh);
     let rustfmt_toml = project_root().join("../../rustfmt.toml");
-    let mut stdout = cmd!(
-        sh,
-        "rustup run {toolchain} rustfmt --config-path {rustfmt_toml} --config fn_single_line=true"
-    )
-    .stdin(text)
-    .read()
-    .unwrap();
-    if !stdout.ends_with('\n') {
-        stdout.push('\n');
+
+    // Format via a temporary file to match `cargo fmt` output exactly.
+    let unique = SystemTime::now().duration_since(UNIX_EPOCH).expect("time drift").as_nanos();
+    let temp_path = project_root().join("src").join(format!("__codegen_tmp_{unique}.rs"));
+
+    fs::write(&temp_path, text).expect("failed to write temp rustfmt input");
+    let rustfmt_result = Command::new("rustup")
+        .arg("run")
+        .arg(toolchain)
+        .arg("rustfmt")
+        .arg("--edition")
+        .arg("2024")
+        .arg("--config-path")
+        .arg(&rustfmt_toml)
+        .arg("--config")
+        .arg("skip_children=true")
+        .arg(&temp_path)
+        .status();
+
+    let mut formatted = fs::read_to_string(&temp_path).expect("failed to read rustfmt output");
+    let _ = fs::remove_file(&temp_path);
+    let status = rustfmt_result.expect("failed to run rustfmt for generated content");
+    assert!(status.success(), "rustfmt failed for generated content");
+
+    if !formatted.ends_with('\n') {
+        formatted.push('\n');
     }
-    stdout
+    formatted
 }
 
 pub fn add_hidden_preamble(generator: &'static str, mut text: String) -> String {
