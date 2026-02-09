@@ -61,6 +61,13 @@ Run from workspace root.
 - `cargo test -p teloxide-ng --test command --features macros`
 - `just ci`
 
+## Release Readiness
+- Ensure public docs/examples use `teloxide-ng` naming consistently.
+- Run:
+  - `cargo clippy -p teloxide-ng --all-targets --features "full nightly" -- -D warnings`
+  - `cargo test -p teloxide-ng --tests --features "full nightly"`
+  - `cargo test -p teloxide-ng --doc --features "full nightly"`
+
 Storage-focused tests:
 - Redis:
   - `cargo test -p teloxide-ng --test redis --features "redis-storage cbor-serializer bincode-serializer"`

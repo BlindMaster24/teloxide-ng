@@ -103,6 +103,17 @@ For maximum parity with CI:
 4. Start PostgreSQL and create test DBs listed above
 5. Run matrix-style commands (`cargo +stable/...`, `cargo +beta/...`, `cargo +nightly/...`)
 
+## Release Readiness
+Before publishing new crate versions:
+
+1. Confirm all crate names/paths remain `*-ng` in manifests, docs, and examples.
+2. Run: `cargo fmt --all -- --check`, `cargo check --workspace --features "full nightly"`, `cargo clippy --workspace --features "full nightly" --all-targets -- -D warnings`.
+3. Run tests using CI-style split:
+   - `cargo test --tests --features "full nightly"`
+   - `cargo test --doc --features "full nightly"`
+4. Run `just check-no-email`.
+5. If codegen tests touched files (`requester.rs`, `local_macros.rs`), re-run tests once more and commit generated updates.
+
 ## Style and Stability Rules
 - Rust 2024 edition, MSRV `1.85`
 - Follow `CODE_STYLE.md` and `rustfmt.toml`

@@ -52,6 +52,11 @@ Run from workspace root.
 - `cargo test -p teloxide-ng --test command --features macros`
 - `just ci`
 
+## Release Readiness
+- Verify end-user command derive behavior still passes in consumer tests:
+  - `cargo test -p teloxide-ng --test command --features macros`
+- Ensure diagnostics remain actionable after macro changes and no old crate naming appears in examples/docs.
+
 For maximum parity, run tests with nightly and ensure docs/clippy at workspace level remain green.
 
 ## Macro Implementation Rules

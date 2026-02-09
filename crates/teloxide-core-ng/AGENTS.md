@@ -59,6 +59,12 @@ Run from workspace root.
 - `cargo check -p teloxide-core-ng --examples --features "full nightly"`
 - `just ci`
 
+## Release Readiness
+- Re-run codegen-sensitive tests if generated files changed:
+  - `cargo test -p teloxide-core-ng --tests --features "full nightly"`
+  - run it a second time if the first run updated sources
+- Keep generated outputs committed when `src/local_macros.rs` or `src/requests/requester.rs` are rewritten by tests.
+
 For CI parity, also run toolchain-specific commands with `+stable`, `+beta`, `+nightly`.
 
 ## Bot API Update Workflow (Practical)
