@@ -1,6 +1,6 @@
 [package]
 name = "teloxide-ng"
-version = "0.17.0"
+version = "0.17.1"
 description = "An elegant Telegram bots framework for Rust"
 
 rust-version.workspace = true
@@ -85,8 +85,8 @@ full = [
 
 [dependencies]
 # replace me by the actual version when release, and return path when it's time to make 0-day fixes
-teloxide_core_ng = { package = "teloxide-core-ng", path = "../teloxide-core-ng", default-features = false }
-teloxide_macros_ng = { package = "teloxide-macros-ng", path = "../teloxide-macros-ng", optional = true }
+teloxide_core_ng = { package = "teloxide-core-ng", path = "../teloxide-core-ng", version = "0.13.1", default-features = false }
+teloxide_macros_ng = { package = "teloxide-macros-ng", path = "../teloxide-macros-ng", version = "0.10.1", optional = true }
 
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }

@@ -2750,7 +2750,7 @@ checksum = "20f34339676cdcab560c9a82300c4c2581f68b9369aedf0fae86f2ff9565ff3e"
 
 [[package]]
 name = "teloxide-core-ng"
-version = "0.13.0"
+version = "0.13.1"
 dependencies = [
  "aho-corasick",
  "bitflags",
@@ -2789,7 +2789,7 @@ dependencies = [
 
 [[package]]
 name = "teloxide-macros-ng"
-version = "0.10.0"
+version = "0.10.1"
 dependencies = [
  "heck",
  "proc-macro2",
@@ -2799,7 +2799,7 @@ dependencies = [
 
 [[package]]
 name = "teloxide-ng"
-version = "0.17.0"
+version = "0.17.1"
 dependencies = [
  "aquamarine",
  "axum",

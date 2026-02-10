@@ -1,6 +1,6 @@
 [package]
 name = "teloxide-macros-ng"
-version = "0.10.0"
+version = "0.10.1"
 description = "The teloxide's procedural macros"
 
 rust-version.workspace = true
