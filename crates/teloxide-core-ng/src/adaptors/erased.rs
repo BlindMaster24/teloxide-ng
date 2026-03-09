@@ -223,6 +223,7 @@ where
         send_dice,
         send_chat_action,
         set_message_reaction,
+        get_user_profile_audios,
         get_user_profile_photos,
         set_user_emoji_status,
         get_file,
@@ -231,6 +232,7 @@ where
         unban_chat_member,
         restrict_chat_member,
         promote_chat_member,
+        set_chat_member_tag,
         set_chat_administrator_custom_title,
         ban_chat_sender_chat,
         unban_chat_sender_chat,
@@ -280,6 +282,8 @@ where
         get_my_description,
         set_my_short_description,
         get_my_short_description,
+        set_my_profile_photo,
+        remove_my_profile_photo,
         set_chat_menu_button,
         get_chat_menu_button,
         set_my_default_administrator_rights,
@@ -569,6 +573,11 @@ trait ErasableRequester<'a> {
         user_id: UserId,
     ) -> ErasedRequest<'a, GetUserProfilePhotos, Self::Err>;
 
+    fn get_user_profile_audios(
+        &self,
+        user_id: UserId,
+    ) -> ErasedRequest<'a, GetUserProfileAudios, Self::Err>;
+
     fn set_user_emoji_status(
         &self,
         user_id: UserId,
@@ -613,6 +622,12 @@ trait ErasableRequester<'a> {
         user_id: UserId,
         custom_title: String,
     ) -> ErasedRequest<'a, SetChatAdministratorCustomTitle, Self::Err>;
+
+    fn set_chat_member_tag(
+        &self,
+        chat_id: Recipient,
+        user_id: UserId,
+    ) -> ErasedRequest<'a, SetChatMemberTag, Self::Err>;
 
     fn ban_chat_sender_chat(
         &self,
@@ -860,6 +875,13 @@ trait ErasableRequester<'a> {
     fn set_my_short_description(&self) -> ErasedRequest<'a, SetMyShortDescription, Self::Err>;
 
     fn get_my_short_description(&self) -> ErasedRequest<'a, GetMyShortDescription, Self::Err>;
+
+    fn set_my_profile_photo(
+        &self,
+        photo: InputProfilePhoto,
+    ) -> ErasedRequest<'a, SetMyProfilePhoto, Self::Err>;
+
+    fn remove_my_profile_photo(&self) -> ErasedRequest<'a, RemoveMyProfilePhoto, Self::Err>;
 
     fn set_chat_menu_button(&self) -> ErasedRequest<'a, SetChatMenuButton, Self::Err>;
 
@@ -1576,6 +1598,13 @@ where
         Requester::get_user_profile_photos(self, user_id).erase()
     }
 
+    fn get_user_profile_audios(
+        &self,
+        user_id: UserId,
+    ) -> ErasedRequest<'a, GetUserProfileAudios, Self::Err> {
+        Requester::get_user_profile_audios(self, user_id).erase()
+    }
+
     fn set_user_emoji_status(
         &self,
         user_id: UserId,
@@ -1635,6 +1664,14 @@ where
         custom_title: String,
     ) -> ErasedRequest<'a, SetChatAdministratorCustomTitle, Self::Err> {
         Requester::set_chat_administrator_custom_title(self, chat_id, user_id, custom_title).erase()
+    }
+
+    fn set_chat_member_tag(
+        &self,
+        chat_id: Recipient,
+        user_id: UserId,
+    ) -> ErasedRequest<'a, SetChatMemberTag, Self::Err> {
+        Requester::set_chat_member_tag(self, chat_id, user_id).erase()
     }
 
     fn ban_chat_sender_chat(
@@ -1988,6 +2025,17 @@ where
 
     fn get_my_short_description(&self) -> ErasedRequest<'a, GetMyShortDescription, Self::Err> {
         Requester::get_my_short_description(self).erase()
+    }
+
+    fn set_my_profile_photo(
+        &self,
+        photo: InputProfilePhoto,
+    ) -> ErasedRequest<'a, SetMyProfilePhoto, Self::Err> {
+        Requester::set_my_profile_photo(self, photo).erase()
+    }
+
+    fn remove_my_profile_photo(&self) -> ErasedRequest<'a, RemoveMyProfilePhoto, Self::Err> {
+        Requester::remove_my_profile_photo(self).erase()
     }
 
     fn set_chat_menu_button(&self) -> ErasedRequest<'a, SetChatMenuButton, Self::Err> {

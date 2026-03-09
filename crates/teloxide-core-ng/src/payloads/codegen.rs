@@ -63,7 +63,6 @@ fn codegen_payloads() {
                 &*method.names.1,
                 "SendPaidMedia"
                     | "SendMediaGroup"
-                    | "SetBusinessAccountProfilePhoto"
                     | "PostStory"
                     | "EditStory"
                     | "EditMessageMedia"
@@ -198,7 +197,10 @@ fn eq_hash_suitable(method: &Method) -> bool {
             Type::Url | Type::DateTime => true,
 
             Type::RawTy(raw) => {
-                raw != "InputSticker" && raw != "MaskPosition" && raw != "InlineQueryResult"
+                raw != "InputSticker"
+                    && raw != "InputProfilePhoto"
+                    && raw != "MaskPosition"
+                    && raw != "InlineQueryResult"
             }
         }
     }
@@ -261,6 +263,6 @@ fn multipart_input_file_fields(m: &Method) -> Option<Vec<&str>> {
 }
 
 fn ty_is_multiparty(ty: &Type) -> bool {
-    matches!(ty, Type::RawTy(x) if x == "InputFile" || x == "InputSticker")
+    matches!(ty, Type::RawTy(x) if x == "InputFile" || x == "InputSticker" || x == "InputProfilePhoto")
         || matches!(ty, Type::Option(inner) if ty_is_multiparty(inner))
 }

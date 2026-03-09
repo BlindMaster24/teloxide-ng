@@ -469,6 +469,11 @@ pub trait Requester {
     /// For Telegram documentation see [`GetUserProfilePhotos`].
     fn get_user_profile_photos(&self, user_id: UserId) -> Self::GetUserProfilePhotos;
 
+    type GetUserProfileAudios: Request<Payload = GetUserProfileAudios, Err = Self::Err>;
+
+    /// For Telegram documentation see [`GetUserProfileAudios`].
+    fn get_user_profile_audios(&self, user_id: UserId) -> Self::GetUserProfileAudios;
+
     type SetUserEmojiStatus: Request<Payload = SetUserEmojiStatus, Err = Self::Err>;
 
     /// For Telegram documentation see [`SetUserEmojiStatus`].
@@ -516,6 +521,13 @@ pub trait Requester {
 
     /// For Telegram documentation see [`PromoteChatMember`].
     fn promote_chat_member<C>(&self, chat_id: C, user_id: UserId) -> Self::PromoteChatMember
+    where
+        C: Into<Recipient>;
+
+    type SetChatMemberTag: Request<Payload = SetChatMemberTag, Err = Self::Err>;
+
+    /// For Telegram documentation see [`SetChatMemberTag`].
+    fn set_chat_member_tag<C>(&self, chat_id: C, user_id: UserId) -> Self::SetChatMemberTag
     where
         C: Into<Recipient>;
 
@@ -928,6 +940,16 @@ pub trait Requester {
 
     /// For Telegram documentation see [`GetMyShortDescription`].
     fn get_my_short_description(&self) -> Self::GetMyShortDescription;
+
+    type SetMyProfilePhoto: Request<Payload = SetMyProfilePhoto, Err = Self::Err>;
+
+    /// For Telegram documentation see [`SetMyProfilePhoto`].
+    fn set_my_profile_photo(&self, photo: InputProfilePhoto) -> Self::SetMyProfilePhoto;
+
+    type RemoveMyProfilePhoto: Request<Payload = RemoveMyProfilePhoto, Err = Self::Err>;
+
+    /// For Telegram documentation see [`RemoveMyProfilePhoto`].
+    fn remove_my_profile_photo(&self) -> Self::RemoveMyProfilePhoto;
 
     type SetChatMenuButton: Request<Payload = SetChatMenuButton, Err = Self::Err>;
 
@@ -1691,6 +1713,7 @@ macro_rules! forward_all {
             send_dice,
             send_chat_action,
             set_message_reaction,
+            get_user_profile_audios,
             get_user_profile_photos,
             set_user_emoji_status,
             get_file,
@@ -1699,6 +1722,7 @@ macro_rules! forward_all {
             unban_chat_member,
             restrict_chat_member,
             promote_chat_member,
+            set_chat_member_tag,
             set_chat_administrator_custom_title,
             ban_chat_sender_chat,
             unban_chat_sender_chat,
@@ -1748,6 +1772,8 @@ macro_rules! forward_all {
             get_my_description,
             set_my_short_description,
             get_my_short_description,
+            set_my_profile_photo,
+            remove_my_profile_photo,
             set_chat_menu_button,
             get_chat_menu_button,
             set_my_default_administrator_rights,
