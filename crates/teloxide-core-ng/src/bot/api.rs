@@ -396,6 +396,12 @@ impl Requester for Bot {
         Self::GetUserProfilePhotos::new(self.clone(), payloads::GetUserProfilePhotos::new(user_id))
     }
 
+    type GetUserProfileAudios = JsonRequest<payloads::GetUserProfileAudios>;
+
+    fn get_user_profile_audios(&self, user_id: UserId) -> Self::GetUserProfileAudios {
+        Self::GetUserProfileAudios::new(self.clone(), payloads::GetUserProfileAudios::new(user_id))
+    }
+
     type SetUserEmojiStatus = JsonRequest<payloads::SetUserEmojiStatus>;
 
     fn set_user_emoji_status(&self, user_id: UserId) -> Self::SetUserEmojiStatus {
@@ -462,6 +468,15 @@ impl Requester for Bot {
             self.clone(),
             payloads::PromoteChatMember::new(chat_id, user_id),
         )
+    }
+
+    type SetChatMemberTag = JsonRequest<payloads::SetChatMemberTag>;
+
+    fn set_chat_member_tag<C>(&self, chat_id: C, user_id: UserId) -> Self::SetChatMemberTag
+    where
+        C: Into<Recipient>,
+    {
+        Self::SetChatMemberTag::new(self.clone(), payloads::SetChatMemberTag::new(chat_id, user_id))
     }
 
     type SetChatAdministratorCustomTitle = JsonRequest<payloads::SetChatAdministratorCustomTitle>;
@@ -1657,7 +1672,8 @@ impl Requester for Bot {
         )
     }
 
-    type SetBusinessAccountProfilePhoto = JsonRequest<payloads::SetBusinessAccountProfilePhoto>;
+    type SetBusinessAccountProfilePhoto =
+        MultipartRequest<payloads::SetBusinessAccountProfilePhoto>;
 
     fn set_business_account_profile_photo(
         &self,
@@ -1668,6 +1684,18 @@ impl Requester for Bot {
             self.clone(),
             payloads::SetBusinessAccountProfilePhoto::new(business_connection_id, photo),
         )
+    }
+
+    type SetMyProfilePhoto = MultipartRequest<payloads::SetMyProfilePhoto>;
+
+    fn set_my_profile_photo(&self, photo: InputProfilePhoto) -> Self::SetMyProfilePhoto {
+        Self::SetMyProfilePhoto::new(self.clone(), payloads::SetMyProfilePhoto::new(photo))
+    }
+
+    type RemoveMyProfilePhoto = JsonRequest<payloads::RemoveMyProfilePhoto>;
+
+    fn remove_my_profile_photo(&self) -> Self::RemoveMyProfilePhoto {
+        Self::RemoveMyProfilePhoto::new(self.clone(), payloads::RemoveMyProfilePhoto::new())
     }
 
     type RemoveBusinessAccountProfilePhoto =

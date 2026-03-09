@@ -11,7 +11,7 @@
     <img src="https://img.shields.io/crates/v/teloxide-ng.svg">
   </a>
   <a href="https://core.telegram.org/bots/api">
-    <img src="https://img.shields.io/badge/API%20coverage-Up%20to%209.1%20(inclusively)-green.svg">
+    <img src="https://img.shields.io/badge/API%20coverage-Up%20to%209.5%20(inclusively)-green.svg">
   </a>
   <a href="https://t.me/teloxide">
     <img src="https://img.shields.io/badge/support-t.me%2Fteloxide-blueviolet">
@@ -369,5 +369,4 @@ See [2500+ other public repositories using `teloxide` >>](https://github.com/tel
 ## Contributing
 
 See [`CONRIBUTING.md`](CONTRIBUTING.md).
-
 
